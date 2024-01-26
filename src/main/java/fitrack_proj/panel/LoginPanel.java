@@ -6,19 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
@@ -46,32 +34,28 @@ public class LoginPanel {
 		this.connection = sql;
 		final JFrame frame = new JFrame();
 		JMenuBar menuBar = new JMenuBar();
-		JMenuItem imperialOpt = new JMenuItem("Imperial");
-		JMenuItem metricOpt = new JMenuItem("Metric");
-		JMenu menu = new JMenu("Settings");
-		JMenu measure = new JMenu("Change System");
-		menu.add(measure);
-		measure.add(imperialOpt);
-		measure.add(metricOpt);
-		menuBar.add(menu);
+		JCheckBox imp = new JCheckBox("Imperial");
+		JCheckBox metric = new JCheckBox(("Metric"));
+		menuBar.add(imp);
+		menuBar.add(metric);
+		imp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dashPanel.setSystem("pounds", "inches");
+			}
+
+		});
+		metric.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dashPanel.setSystem("kilograms", "centimeters");
+			}
+
+		});
 		frame.setJMenuBar(menuBar);
 		final JPanel cardPanel = new JPanel(new CardLayout());
 		final JPanel mainScreen = new JPanel();
 		dashPanel = new DashPanel(cardPanel, connection);
-		imperialOpt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dashPanel.setSystem(false);
-			}
-			
-		});
-		metricOpt.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dashPanel.setSystem(true);
-			}
-			
-		});
 		final JButton login = new JButton();
 		login.setText("Login");
 		login.addActionListener(new ActionListener() {

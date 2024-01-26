@@ -28,13 +28,17 @@ public class FitnessHistory {
 		metValues.put(4, 8.0);
 	}
 
-	/**
-	 * Adds an exercise to a user's history.
-	 *
-	 * @param exercise Name of exercise to add
-	 */
-	public static void addExercise(String exercise, int duration, String user) {
-
+	private static double convertImperial(double measurement, String system) {
+		double result = measurement;
+		if (system.compareTo("lbs") < 0 || system.compareTo("inches") < 0) {
+			return result;
+		}
+		if (system.compareTo("lbs") == 0) {
+			result /= 2.2046;
+		} else if (system.compareTo("inches") == 0) {
+			result *= 2.54;
+		}
+		return result;
 	}
 
 	/**
@@ -61,13 +65,19 @@ public class FitnessHistory {
 	 * @param age      Age of user
 	 * @return Calorie value calculated
 	 */
-	public static int calculateCal(int weight, int height, String gender, String activity, int age) {
+	public static int calculateCal(int weight, int height, String gender, String activity, int age, String stringWeight) {
 		int amr = 0;
+		String system = "";
+		if (stringWeight.compareTo("pounds") == 0) {
+			system = stringWeight;
+		} else if (stringWeight.compareTo("inches") == 0) {
+			system = stringWeight;
+		}
 		double bmr = 0.0;
 		if (gender.toLowerCase().equals("female")) {
-			bmr = 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * age);
+			bmr = 655.1 + (9.563 * convertImperial(weight, system)) + (1.850 * convertImperial(height, system)) - (4.676 * age);
 		} else {
-			bmr = 66.47 + (13.75 * weight) + (5.003 * height) - (6.755 * age);
+			bmr = 66.47 + (13.75 * convertImperial(weight, system)) + (5.003 * convertImperial(height, system)) - (6.755 * age);
 		}
 		switch (activity.toLowerCase()) {
 		case ("little to no exercise"):

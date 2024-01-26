@@ -1,9 +1,6 @@
 package fitrack_proj.panel;
 
-import java.awt.CardLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -30,7 +27,8 @@ import fitrack_proj.util.PasswordEncryptor;
 public class DashPanel extends JPanel {
 
 	private static final long serialVersionUID = 1717879360554347766L;
-	private boolean metric;
+	private String system;
+	private String measure;
 	private int height;
 	private int weight;
 	private int age;
@@ -41,6 +39,9 @@ public class DashPanel extends JPanel {
 	private FitrackDatabase connection;
 	private JPanel cards;
 	private ResultSet results;
+	private String heightMeasure;
+
+	private GridBagConstraints consts;
 
 	/**
 	 * DashPanel constructor.
@@ -79,7 +80,6 @@ public class DashPanel extends JPanel {
 	/**
 	 * Makes the CardLayout's current panel the Dash panel
 	 *
-	 * @param cards Main CardLayout to use
 	 */
 	public void showPanel() {
 //		JLabel test = new JLabel();
@@ -90,7 +90,7 @@ public class DashPanel extends JPanel {
 //		}
 //		this.add(test);
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints consts = new GridBagConstraints();
+		consts = new GridBagConstraints();
 		JButton returnButton = new JButton();
 		returnButton.setText("Return");
 		returnButton.addActionListener(new ActionListener() {
@@ -102,10 +102,11 @@ public class DashPanel extends JPanel {
 		JTextArea status = new JTextArea();
 		status.setEditable(false);
 		status.setText("Welcome back " + username + "!\n" +
-                "Current Weight: " + weight + " kgs" + "\n" +
-                "Current Height: " + height + " cm's" + "\n" +
+                "Current Height: " + height + " " + heightMeasure + "\n" +
+				"Current Weight: " + weight + " " + measure + "\n" +
                 "Current recommended calories: " +
-                FitnessHistory.calculateCal(weight, height, gender, activity, age));
+                FitnessHistory.calculateCal(weight, height, gender, activity, age, measure) + "\n" +
+				"Weight Goal Progress: ");
 		consts.gridx = 0;
 		consts.gridy = 0;
 		this.add(status, consts);
@@ -113,9 +114,16 @@ public class DashPanel extends JPanel {
 		consts.gridy = 0;
 		JTextArea test2 = new JTextArea();
 		test2.setText("testestestsetestset");
+		test2.setBackground(Color.WHITE);
 		consts.gridx = 1;
 		consts.gridy = 0;
 		this.add(test2, consts);
+		JTextArea test3 = new JTextArea();
+		test3.setText("meoweoadosaodas");
+		test3.setBackground(Color.BLUE);
+		consts.gridx = 2;
+		consts.gridy = 1;
+		this.add(test3, consts);
 //		JLabel selectActivity = new JLabel();
 //		selectActivity.setText("Select performed exercise or activity type:");
 //		final JComboBox<String> addExercise = new JComboBox<>();
@@ -165,12 +173,8 @@ public class DashPanel extends JPanel {
 //		this.add(history, consts);
 	}
 	
-	public void setSystem(boolean metric) {
-		this.metric = metric;
-		if (metric) {
-			System.out.println("metric");
-		} else {
-			System.out.println("imperial");
-		}
+	public void setSystem(String measure, String heightMeasure) {
+		this.measure = measure;
+		this.heightMeasure = heightMeasure;
 	}
 }
