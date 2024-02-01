@@ -1,180 +1,135 @@
 package fitrack_proj.panel;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import fitrack_proj.app.FitnessHistory;
 import fitrack_proj.util.FitrackDatabase;
 import fitrack_proj.util.PasswordEncryptor;
 
+import javax.swing.*;
+import java.awt.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 /**
- * Utilpanel Class.
+ * DashPanel Class.
  *
  * @author yirw
- *
  */
+@SuppressWarnings("ALL")
 public class DashPanel extends JPanel {
+  private int userId;
+  private int height;
+  private int weight;
+  private int age;
+  private String activity;
+  private String gender;
+  private String username;
+  private final FitrackDatabase connection;
+  private final JPanel cards;
+  private ResultSet results;
 
-	private static final long serialVersionUID = 1717879360554347766L;
-	private String system;
-	private String measure;
-	private int height;
-	private int weight;
-	private int age;
-	private String activity;
-	private int userId;
-	private String gender;
-	private String username;
-	private FitrackDatabase connection;
-	private JPanel cards;
-	private ResultSet results;
-	private String heightMeasure;
+  /**
+   * DashPanel constructor.
+   *
+   * @param cards      CardPanel to utilize
+   * @param connection FitrackDatabase to use for information
+   */
+  public DashPanel(final JPanel cards, FitrackDatabase connection) {
+    this.cards = cards;
+    this.connection = connection;
+  }
 
-	private GridBagConstraints consts;
+  /**
+   * Sets the current user's information for the current DashPanel
+   *
+   * @param username username of the user to set as current
+   * @param password password of the user to set as current
+   */
+  public void setUser(String username, String password) {
+    results = connection.retrieveUser(username, PasswordEncryptor.hashPassword(password));
+    this.username = username;
+    try {
+      while (results.next()) {
+        this.userId = results.getInt("user_id");
+        this.height = results.getInt("height");
+        this.weight = results.getInt("weight");
+        this.age = results.getInt("age");
+        this.gender = results.getString("gender");
+        this.activity = results.getString("activity");
+      }
+    } catch (SQLException sqe) {
+      System.out.println("Failed to set the user to the current DashPanel.");
+    }
+  }
 
-	/**
-	 * DashPanel constructor.
-	 *
-	 * @param cards      CardPanel to utilize
-	 * @param connection FitrackDatabase to use for information
-	 */
-	public DashPanel(final JPanel cards, FitrackDatabase connection) {
-		this.cards = cards;
-		this.connection = connection;
-	}
+  /**
+   * Makes the CardLayout's current panel the Dash panel
+   */
+  public void showPanel() {
+    this.removeAll();
+    this.setLayout(new GridBagLayout());
+    GridBagConstraints consts = new GridBagConstraints();
+    consts.insets = new Insets(5, 5, 5, 5); // Add spacing between components
 
-	/**
-	 * Sets the current user's information for the current DashPanel
-	 *
-	 * @param username
-	 * @param password
-	 */
-	public void setUser(String username, String password) {
-		results = connection.retrieveUser(username, PasswordEncryptor.hashPassword(password));
-		this.username = username;
-		try {
-			while (results.next()) {
-				this.userId = results.getInt("id");
-				this.height = results.getInt("height");
-				this.weight = results.getInt("weight");
-				this.age = results.getInt("age");
-				this.gender = results.getString("gender");
-				this.activity = results.getString("activity");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    JButton returnButton = new JButton("Return");
+    returnButton.addActionListener(e -> ((CardLayout) cards.getLayout()).show(cards, "login"));
+    consts.gridx = 0;
+    consts.gridy = 0;
+    this.add(returnButton, consts);
 
-	/**
-	 * Makes the CardLayout's current panel the Dash panel
-	 *
-	 */
-	public void showPanel() {
-//		JLabel test = new JLabel();
-//		if (this.metric) {
-//			test.setText("metric");
-//		} else {
-//			test.setText("imperial");
-//		}
-//		this.add(test);
-		this.setLayout(new GridBagLayout());
-		consts = new GridBagConstraints();
-		JButton returnButton = new JButton();
-		returnButton.setText("Return");
-		returnButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				((CardLayout) cards.getLayout()).show(cards, "login");
-			}
-		});
-		JTextArea status = new JTextArea();
-		status.setEditable(false);
-		status.setText("Welcome back " + username + "!\n" +
-                "Current Height: " + height + " " + heightMeasure + "\n" +
-				"Current Weight: " + weight + " " + measure + "\n" +
-                "Current recommended calories: " +
-                FitnessHistory.calculateCal(weight, height, gender, activity, age, measure) + "\n" +
-				"Weight Goal Progress: ");
-		consts.gridx = 0;
-		consts.gridy = 0;
-		this.add(status, consts);
-		consts.gridx = 0;
-		consts.gridy = 0;
-		JTextArea test2 = new JTextArea();
-		test2.setText("testestestsetestset");
-		test2.setBackground(Color.WHITE);
-		consts.gridx = 1;
-		consts.gridy = 0;
-		this.add(test2, consts);
-		JTextArea test3 = new JTextArea();
-		test3.setText("meoweoadosaodas");
-		test3.setBackground(Color.BLUE);
-		consts.gridx = 2;
-		consts.gridy = 1;
-		this.add(test3, consts);
-//		JLabel selectActivity = new JLabel();
-//		selectActivity.setText("Select performed exercise or activity type:");
-//		final JComboBox<String> addExercise = new JComboBox<>();
-//		addExercise.addItem("");
-//		addExercise.addItem("Sports");
-//		addExercise.addItem("Biking");
-//		addExercise.addItem("Conditioning (resistance training)");
-//		addExercise.addItem("Cardio");
-//		final JTextField timeElapsed = new JTextField(10);
-//		JLabel exerciseTime = new JLabel();
-//		exerciseTime.setText("Enter elapsed time (in minutes):");
-//		JButton registerExercise = new JButton();
-//		registerExercise.setText("Submit");
-//		registerExercise.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				Object t = addExercise.getSelectedItem();
-//				String m = timeElapsed.getText();
-//				connection.insertExercise(t.toString(), Integer.parseInt(m), userId);
-//			}
-//		});
+    JTextArea status = new JTextArea();
+    status.setEditable(false);
+    status.setText("Welcome back " + username + "!\n" +
+        "Current Height: " + height + " inches\n" +
+        "Current Weight: " + weight + " lbs\n" +
+        "Projected Daily Calories Burnt: " +
+        FitnessHistory.calculateCal(weight, height, gender, activity, age) + "\n");
+    consts.gridy = 1;
+    consts.fill = GridBagConstraints.HORIZONTAL; // Make the JTextArea horizontally expandable
+    this.add(status, consts);
 
-//		JLabel history = new JLabel();
-//		StringBuilder test = new StringBuilder();
-//		ArrayList<String> tests = FitnessHistory.retrieveHistory(connection, username, results, userId);
-//		for (String s : tests) {
-//			test.append(s + "\n");
-//		}
-//		history.setText(test.toString());
-//		consts.gridx = 1; 
-//		consts.gridy = 3;
-//		this.add(selectActivity, consts);
-//		consts.gridx = 1; 
-//		consts.gridy = 4;
-//		this.add(addExercise, consts);
-//		consts.gridx = 2; 
-//		consts.gridy = 5;
-//		this.add(exerciseTime, consts);
-//		consts.gridx = 2; 
-//		consts.gridy = 6;
-//		this.add(timeElapsed, consts);
-//		consts.gridx = 1; 
-//		consts.gridy = 1;
-//		this.add(registerExercise, consts);
-//		consts.gridx = 1; 
-//		consts.gridy = 1;
-//		this.add(history, consts);
-	}
-	
-	public void setSystem(String measure, String heightMeasure) {
-		this.measure = measure;
-		this.heightMeasure = heightMeasure;
-	}
+    JLabel selectActivity = new JLabel("Select performed exercise or activity type:");
+    consts.gridy = 2;
+    consts.fill = GridBagConstraints.NONE; // Reset fill to default
+    this.add(selectActivity, consts);
+
+    final JComboBox<String> addExercise = new JComboBox<>();
+    addExercise.addItem("");
+    addExercise.addItem("Sports");
+    addExercise.addItem("Biking");
+    addExercise.addItem("Conditioning (resistance training)");
+    addExercise.addItem("Cardio");
+    consts.gridy = 3;
+    this.add(addExercise, consts);
+
+    final JTextField timeElapsed = new JTextField(10);
+    JLabel exerciseTime = new JLabel("Enter elapsed time (in minutes):");
+    consts.gridy = 4;
+    this.add(exerciseTime, consts);
+    consts.gridy = 5;
+    this.add(timeElapsed, consts);
+
+    JButton registerExercise = new JButton("Submit");
+    registerExercise.addActionListener(e -> {
+      Object selected = addExercise.getSelectedItem();
+      String selectedText = timeElapsed.getText();
+      assert selected != null;
+      connection.insertExercise(selected.toString(), Integer.parseInt(selectedText), userId);
+    });
+    consts.gridy = 6;
+    this.add(registerExercise, consts);
+
+    JLabel history = new JLabel("Exercise History:");
+    consts.gridy = 7;
+    this.add(history, consts);
+    JTextArea historyText = new JTextArea();
+    ArrayList<String> tests =
+        FitnessHistory.retrieveHistory(connection, userId);
+    for (String s : tests) {
+      historyText.append(s + "\n");
+    }
+    consts.gridy = 8;
+    this.add(historyText, consts);
+
+  }
 }
