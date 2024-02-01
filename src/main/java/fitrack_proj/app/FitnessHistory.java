@@ -95,7 +95,7 @@ public class FitnessHistory {
    * @param userid     user_id of the user to retrieve from
    * @return Returns the ArrayList of type string containing the user's history
    */
-  public static ArrayList<String> retrieveHistory(FitrackDatabase connection,
+  public static ResultSet retrieveHistory(FitrackDatabase connection,
                                                   int userid) {
     return connection.retrieveHistory(userid);
   }

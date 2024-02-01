@@ -15,8 +15,8 @@ import java.util.ArrayList;
  *
  * @author yirw
  */
-@SuppressWarnings("ALL")
 public class DashPanel extends JPanel {
+  private static final long serialVersionUID = -2136961495276530281L;
   private int userId;
   private int height;
   private int weight;
@@ -115,6 +115,7 @@ public class DashPanel extends JPanel {
       String selectedText = timeElapsed.getText();
       assert selected != null;
       connection.insertExercise(selected.toString(), Integer.parseInt(selectedText), userId);
+      
     });
     consts.gridy = 6;
     this.add(registerExercise, consts);
@@ -123,13 +124,20 @@ public class DashPanel extends JPanel {
     consts.gridy = 7;
     this.add(history, consts);
     JTextArea historyText = new JTextArea();
-    ArrayList<String> tests =
-        FitnessHistory.retrieveHistory(connection, userId);
-    for (String s : tests) {
-      historyText.append(s + "\n");
-    }
+    ResultSet exerciseSet = FitnessHistory.retrieveHistory(connection, userId);
+    try {
+    	while (exerciseSet.next()) {
+    		historyText.append(exerciseSet.getString("exercise_type"));
+    		historyText.append(" ");
+    		historyText.append(String.valueOf(exerciseSet.getInt("exercise_time")));
+    		historyText.append(" ");
+    		historyText.append(String.valueOf(exerciseSet.getDate("date")));
+    		historyText.append(" ");
+    	}
+	} catch (SQLException sqe) {
+		System.out.println("Failed to retrieve the user's exercise history");
+	}
     consts.gridy = 8;
     this.add(historyText, consts);
-
   }
 }
