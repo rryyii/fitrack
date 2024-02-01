@@ -34,24 +34,6 @@ public class LoginPanel {
 		this.connection = sql;
 		final JFrame frame = new JFrame();
 		JMenuBar menuBar = new JMenuBar();
-		JCheckBox imp = new JCheckBox("Imperial");
-		JCheckBox metric = new JCheckBox(("Metric"));
-		menuBar.add(imp);
-		menuBar.add(metric);
-		imp.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dashPanel.setSystem("pounds", "inches");
-			}
-
-		});
-		metric.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dashPanel.setSystem("kilograms", "centimeters");
-			}
-
-		});
 		frame.setJMenuBar(menuBar);
 		final JPanel cardPanel = new JPanel(new CardLayout());
 		final JPanel mainScreen = new JPanel();
@@ -72,9 +54,10 @@ public class LoginPanel {
 				userLogin.add(Box.createHorizontalStrut(15));
 				userLogin.add(new JLabel("Password:"));
 				userLogin.add(password);
-				JOptionPane.showConfirmDialog(null, userLogin, "Please enter your username and password.",
+				int result = JOptionPane.showConfirmDialog(null, userLogin, "Please enter your username and password.",
 						JOptionPane.OK_CANCEL_OPTION);
-				if (username.getText().equals("") || password.getText().equals("")) {
+				if (username.getText().isEmpty() ||
+                    password.getText().isEmpty() && result != JOptionPane.CANCEL_OPTION) {
 					JOptionPane.showMessageDialog(login, "Please fill in all fields.");
 				} else if (!connection.verifyLogin(username.getText(), password.getText())) {
 					JOptionPane.showMessageDialog(login, "Invalid username and password.");
@@ -129,10 +112,10 @@ public class LoginPanel {
 				userRegister.add(activity);
 
 				JOptionPane.showConfirmDialog(null, userRegister, "User Registration", JOptionPane.OK_CANCEL_OPTION);
-				if (connection.registerUser(username.getText(), password.getText(), gender.getSelectedItem().toString(),
-						Integer.parseInt(weight.getText()), Integer.parseInt(height.getText()),
-						activity.getSelectedItem().toString(), Integer.parseInt(age.getText())) == -1) {
-				}
+//				if (connection.registerUser(username.getText(), password.getText(), gender.getSelectedItem().toString(),
+//						Integer.parseInt(weight.getText()), Integer.parseInt(height.getText()),
+//						activity.getSelectedItem().toString(), Integer.parseInt(age.getText())) == -1) {
+//				}
 			}
 		});
 
