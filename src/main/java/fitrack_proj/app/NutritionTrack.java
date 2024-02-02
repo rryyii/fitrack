@@ -8,10 +8,10 @@ import javax.swing.*;
 
 public class NutritionTrack extends JPanel {
 
-  public void displayChart() {
-    PieChart chart = new PieChart(5, 5);
-    chart.addSeries("", 50);
-    XChartPanel<PieChart> chartPanel = new SwingWrapper<>(chart).getXChartPanel();
-    this.add(chartPanel);
-  }
+	public void displayChart() {
+		PieChart chart = new PieChart(5, 5);
+		chart.addSeries("", 50);
+		XChartPanel<PieChart> chartPanel = new SwingWrapper<>(chart).getXChartPanel();
+		this.add(chartPanel);
+	}
 }
