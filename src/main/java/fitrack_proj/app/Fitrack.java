@@ -27,6 +27,6 @@ public class Fitrack {
 	 */
 	public void createInstance() {
 		LoginPanel menu = new LoginPanel();
-		JFrame gui = menu.createMenu(new FitrackDatabase());
+		menu.createMenu(new FitrackDatabase());
 	}
 }

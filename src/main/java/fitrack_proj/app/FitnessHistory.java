@@ -1,8 +1,5 @@
 package fitrack_proj.app;
 
-import fitrack_proj.util.FitrackDatabase;
-
-import java.sql.ResultSet;
 import java.util.HashMap;
 
 /**
@@ -15,6 +12,13 @@ public class FitnessHistory {
 	private static final HashMap<Integer, Double> metValues = new HashMap<>();
 
 	public FitnessHistory() {
+		initializeMaps();
+	}
+
+	/**
+	 * Initializes the two HashMaps containing exercises and their met values.
+	 */
+	private void initializeMaps() {
 		exerciseKeys.put(1, "sports");
 		exerciseKeys.put(2, "biking");
 		exerciseKeys.put(3, "resistance");
@@ -45,8 +49,7 @@ public class FitnessHistory {
 		double burntCalories = 0.0;
 		double metValue = metValues.get(exerciseType);
 		burntCalories = metValue * 3.5 * weight / 200;
-		// met value * 3.5 * weight/200 = calories burnt per minute (so * 60 to get per
-		// hour)
+		// met value * 3.5 * weight/200 = calories burnt per minute
 		return burntCalories * timeElapsed;
 	}
 
@@ -58,7 +61,7 @@ public class FitnessHistory {
 	 * @param gender   Gender of user
 	 * @param activity Activity level of user
 	 * @param age      Age of user
-	 * @return Calorie value calculated in type int
+	 * @return Calories Value calculated in type int
 	 */
 	public static int calculateCal(int weight, int height, String gender, String activity, int age) {
 		int amr = 0;
@@ -85,17 +88,6 @@ public class FitnessHistory {
 			break;
 		}
 		return amr;
-	}
-
-	/**
-	 * Retrieves the given user's exercise history.
-	 *
-	 * @param connection Established SQL database connection
-	 * @param userid     user_id of the user to retrieve from
-	 * @return Returns the ArrayList of type string containing the user's history
-	 */
-	public static ResultSet retrieveHistory(FitrackDatabase connection, int userid) {
-		return connection.retrieveHistory(userid);
 	}
 
 }
