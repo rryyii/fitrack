@@ -4,8 +4,18 @@ import fitrack_proj.app.FitnessHistory;
 import fitrack_proj.util.FitrackDatabase;
 import fitrack_proj.util.PasswordEncryptor;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.SwingUtilities;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.CardLayout;
+import java.awt.Insets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -67,16 +77,11 @@ public class DashPanel extends JPanel {
 	 * 
 	 */
 	public void showPanel() {
+		NutritionPanel showNutrition = new NutritionPanel(cards);
 		this.removeAll();
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints consts = new GridBagConstraints();
 		consts.insets = new Insets(5, 5, 5, 5); // Add spacing between components
-
-		JButton returnButton = new JButton("Return");
-		returnButton.addActionListener(e -> ((CardLayout) cards.getLayout()).show(cards, "login"));
-		consts.gridx = 0;
-		consts.gridy = 0;
-		this.add(returnButton, consts);
 
 		JTextArea status = new JTextArea();
 		status.setEditable(false);
@@ -131,11 +136,26 @@ public class DashPanel extends JPanel {
 		});
 		consts.gridy = 6;
 		this.add(registerExercise, consts);
+
+		final JPanel nutritionPanel = showNutrition.createChart(retrieveHistory(connection, userId));
+		JButton chartButton = new JButton("Show Chart");
+		chartButton.addActionListener(e -> {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					((CardLayout) cards.getLayout()).show(cards, "nutrition");
+				}
+			});
+		});
+		consts.gridx = 0;
+		consts.gridy = 0;
+		this.add(chartButton, consts);
+		cards.add(nutritionPanel, "nutrition");
 	}
 
-	private void updateHistory(JTextArea historyText) {
+	private ResultSet updateHistory(JTextArea historyText) {
 		historyText.setText("");
-		ResultSet exerciseSet = FitnessHistory.retrieveHistory(connection, userId);
+		ResultSet exerciseSet = retrieveHistory(connection, userId);
 		try {
 			while (exerciseSet.next()) {
 				String exerciseType = exerciseSet.getString("exercise_type");
@@ -144,8 +164,21 @@ public class DashPanel extends JPanel {
 				String output = exerciseType + " " + exerciseDuration + " " + exerciseDate;
 				historyText.append(output + "\n");
 			}
+
 		} catch (SQLException sqe) {
 			System.out.println("Failed to retrieve history");
 		}
+		return exerciseSet;
+	}
+
+	/**
+	 * Retrieves the given user's exercise history.
+	 *
+	 * @param connection Established SQL database connection
+	 * @param userid     user_id of the user to retrieve from
+	 * @return Returns the ArrayList of type string containing the user's history
+	 */
+	private static ResultSet retrieveHistory(FitrackDatabase connection, int userid) {
+		return connection.retrieveHistory(userid);
 	}
 }
