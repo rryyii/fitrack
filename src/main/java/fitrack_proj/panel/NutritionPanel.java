@@ -3,34 +3,56 @@ package fitrack_proj.panel;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.style.Styler;
+import org.knowm.xchart.style.Styler.ChartTheme;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * NutritionPanel Class.
+ *
+ * @author ryanyi
+ *
+ */
 public class NutritionPanel extends JPanel {
 
 	private JPanel cards;
+	private PieChart chart;
 	private ResultSet historySet;
 	private static final long serialVersionUID = 2223906239612989135L;
 
-	public NutritionPanel() {
-	}
-
+	/**
+	 * NutritionPanel constructor.
+	 *
+	 * @param cards CardLayout to use for return button
+	 */
 	public NutritionPanel(final JPanel cards) {
 		this.cards = cards;
 	}
 
-	public JPanel createChart(ResultSet historySet) {
+	/**
+	 * Creates the PieChart to add to the Panel.
+	 *
+	 * @param historySet ResultSet of the user's history to use to fill chart
+	 * @return The JPanel containing the PieChart
+	 */
+	public JPanel createChart(ResultSet historySet, JFrame frame) {
 		this.historySet = historySet;
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints consts = new GridBagConstraints();
@@ -42,20 +64,15 @@ public class NutritionPanel extends JPanel {
 				@Override
 				public void run() {
 					((CardLayout) cards.getLayout()).show(cards, "dash");
+					frame.pack();
 				}
 			});
 		});
 		consts.gridx = 0;
 		consts.gridy = 0;
 
-		HashMap<String, Integer> historyMap = updateChart();
-		PieChart chart = new PieChartBuilder().width(250).height(250).build();
-		chart.getStyler().setPlotBackgroundColor(getBackground());
-		chart.getStyler().setChartBackgroundColor(getBackground());
-
-		for (Map.Entry<String, Integer> entry : historyMap.entrySet()) {
-			chart.addSeries(entry.getKey(), entry.getValue());
-		}
+		this.chart = buildChart();
+		updateChart(this.historySet);
 
 		chart.setTitle("Exercise Distribution:");
 		XChartPanel<PieChart> chartPanel = new XChartPanel<>(chart);
@@ -65,17 +82,44 @@ public class NutritionPanel extends JPanel {
 		return chartPanel;
 	}
 
-	public HashMap<String, Integer> updateChart() {
-		HashMap<String, Integer> historyMap = new HashMap<>();
+	/**
+	 * Updates the chart to contain the information in the ResultSet.
+	 *
+	 * @return Returns a HashMap of type String, Integer that contains the
+	 *         information for the chart series
+	 */
+	public HashMap<String, Integer> updateChart(ResultSet historySet) {
+		HashMap<String, Integer > map = new HashMap<>();
+		map.clear();
 		try {
-			while (this.historySet.next()) {
-				String exerciseType = this.historySet.getString("exercise_type");
-				int exerciseDuration = this.historySet.getInt("exercise_time");
-				historyMap.put(exerciseType, exerciseDuration);
+			while (historySet.next()) {
+				String exerciseType = historySet.getString("exercise_type");
+				int exerciseDuration = historySet.getInt("exercise_time");
+				map.put(exerciseType, exerciseDuration);
+				chart.addSeries(exerciseType, exerciseDuration);
 			}
 		} catch (SQLException sqe) {
 			System.out.println("Failed to update chart");
 		}
-		return historyMap;
+		return map;
+	}
+	
+
+	/**
+	 * Builds the actual chart and sets several visual aspects of it.
+	 *
+	 * @return The created PieChart with its visuals
+	 */
+	private PieChart buildChart() {
+		PieChart chart = new PieChartBuilder().width(250).height(250).build();
+		chart.getStyler().setBaseFont(getFont());
+		chart.getStyler().setPlotBackgroundColor(getBackground());
+		chart.getStyler().setChartBackgroundColor(getBackground());
+		chart.getStyler().setChartFontColor(Color.WHITE);
+		chart.getStyler().setPlotBorderColor(getBackground());
+		chart.getStyler().setLegendBackgroundColor(getBackground());
+		chart.getStyler().setChartTitleBoxBackgroundColor(getBackground());
+		chart.getStyler().setChartTitleBoxBorderColor(getBackground());
+		return chart;
 	}
 }
