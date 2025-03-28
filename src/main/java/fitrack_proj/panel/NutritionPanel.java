@@ -5,7 +5,7 @@ import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.Styler.ChartTheme;
-
+import net.miginfocom.swing.MigLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -43,6 +43,7 @@ public class NutritionPanel extends JPanel {
    * @param cards CardLayout to use for return button
    */
   public NutritionPanel(final JPanel cards) {
+    super(new MigLayout());
     this.cards = cards;
   }
 
@@ -52,7 +53,7 @@ public class NutritionPanel extends JPanel {
    * @param historySet ResultSet of the user's history to use to fill chart
    * @return The JPanel containing the PieChart
    */
-  public JPanel createChart(ResultSet historySet, JFrame frame) {
+  public JPanel createChart(ResultSet historySet) {
     this.historySet = historySet;
     this.setLayout(new GridBagLayout());
     GridBagConstraints consts = new GridBagConstraints();
@@ -64,7 +65,6 @@ public class NutritionPanel extends JPanel {
         @Override
         public void run() {
           ((CardLayout) cards.getLayout()).show(cards, "dash");
-          frame.pack();
         }
       });
     });

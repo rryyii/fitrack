@@ -20,7 +20,7 @@ class UserAuthenticationTest {
     String activity = "none";
     int age = 25;
     assertEquals(1, connection.registerUser(username, password, gender, height, weight, activity, age));
-    assertTrue(connection.verifyLogin(username, password));
+    assertEquals(1, connection.verifyLogin(username, password));
   }
   
   @Test
@@ -39,7 +39,7 @@ class UserAuthenticationTest {
   void testLoginFailure() {
     String username = "not_real";
     String password = "no_password";
-    assertFalse(connection.verifyLogin(username, password));
+    assertEquals(-1, connection.verifyLogin(username, password));
   }
   
 }

@@ -1,162 +1,98 @@
 package fitrack_proj.panel;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import fitrack_proj.util.FitrackDatabase;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
 import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
+import javax.swing.*;
+import fitrack_proj.util.FitrackDatabase;
+import fitrack_proj.util.PasswordEncryptor;
+import net.miginfocom.swing.MigLayout;
 
-/**
- * Main panel that contains login and register functions.
- *
- * @author yirw
- */
-public class LoginPanel {
-
-  private FitrackDatabase connection;
-  private DashPanel dashPanel;
+public class LoginPanel extends JPanel implements ActionListener {
 
   /**
-   * Creates the main frame and panel for Fitrack.
-   *
-   * @param sql Established SQL database connection
-   * @return Returns a JFrame of the created LoginPanel
+   * LoginPanel main constructor creates the login page 
+   * @param cards JPanel of the current cards in the CardLayout
+   * @param connection Established SQL database connection
    */
-  public JFrame createMenu(FitrackDatabase sql) {
-    FlatDarkLaf.setup();
-    this.connection = sql;
-    final JFrame frame = new JFrame();
-    JMenuBar menuBar = new JMenuBar();
-    frame.setJMenuBar(menuBar);
-    final JPanel cardPanel = new JPanel(new CardLayout());
-    final JPanel mainPanel = new JPanel();
-    dashPanel = new DashPanel(cardPanel, connection, frame);
-    final JButton loginButton = new JButton();
-    loginButton.setText("Login");
+  public LoginPanel(JPanel cards, FitrackDatabase connection) {
+    super(new MigLayout("wrap 2"));
+    this.cards = cards;
+    loginField = new JTextField(15);
+    passField = new JPasswordField(15);
+
+    loginButton = new JButton("Login");
+    CardLayout cardLayout = (CardLayout) cards.getLayout();
+    loginButton
+        .addActionListener(new LoginListener(loginField, passField, connection, cards, cardLayout));
+
+    registerButton = new JButton("Register");
+    registerButton.addActionListener(this);
     
-    JLabel userLabel = new JLabel("Username: ");
-    JLabel passLabel = new JLabel("Password: ");
-    JTextField usernameField = new JTextField(10);
-    JTextField passwordField = new JPasswordField(10);
-    mainPanel.add(userLabel);
-    mainPanel.add(usernameField);
-    mainPanel.add(passLabel);
-    mainPanel.add(passwordField);
-    // Creates the ActionListener for the login button
-    loginButton.addActionListener(new ActionListener() {
+    userLabel = new JLabel("Username: ");
+    passLabel = new JLabel("Password: ");
+    
+    add(userLabel);
+    add(loginField);
+    add(passLabel);
+    add(passField);
+    add(loginButton);
+    add(registerButton);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    CardLayout cardLayout = (CardLayout) cards.getLayout();
+    cardLayout.show(cards, "REGISTERPANEL");
+  }
+
+  private JButton loginButton;
+  private JButton registerButton;
+  private JTextField loginField;
+  private JPasswordField passField;
+  private JTextArea displayInfo;
+  private JLabel userLabel;
+  private JLabel passLabel;
+  private JPanel cards;
+
+}
+
+
+/**
+ * Helper class for listening and performing login verification
+ */
+class LoginListener implements ActionListener {
+  public LoginListener(JTextField loginField, JTextField passField, FitrackDatabase connection,
+      JPanel cards, CardLayout cardLayout) {
+    this.loginField = loginField;
+    this.passField = passField;
+    this.connection = connection;
+    this.cards = cards;
+    this.cardLayout = cardLayout;
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+
+    SwingUtilities.invokeLater(new Runnable() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        SwingUtilities.invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            if (!connection.verifyLogin(usernameField.getText(), passwordField.getText())) {
-              JOptionPane.showMessageDialog(loginButton, "Invalid Username and Password.");
-            } else {
-              dashPanel.setUser(usernameField.getText(), passwordField.getText());
-              dashPanel.showPanel();
-              ((CardLayout) cardPanel.getLayout()).show(cardPanel, "dash");
-              frame.pack();
-            }
-          }
-        });
+      public void run() {
+        int result;
+        if ((result = connection.verifyLogin(loginField.getText(), passField.getText())) == -1) {
+          JOptionPane.showMessageDialog(null, "Invalid Username and Password.");
+        } else {
+          cards.add(new DashPanel(cards, connection, result), "DASHPANEL");
+          cardLayout.show(cards, "DASHPANEL");
+        }
       }
     });
 
-    final JButton registerButton = new JButton();
-    registerButton.setText("Register");
-    registerButton.addActionListener(e -> {
-      SwingUtilities.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-          GridLayout registerLayout = new GridLayout(7, 2);
-          registerLayout.setVgap(10);
-          registerLayout.setHgap(10);
-          JTextField usernameField = new JTextField(15);
-          JTextField heightField = new JTextField(10);
-          JTextField passwordField = new JTextField(10);
-          JTextField weight = new JTextField(10);
-          JTextField age = new JTextField((10));
-          JComboBox<String> genderBox = new JComboBox<>();
-          genderBox.addItem("");
-          genderBox.addItem("Male");
-          genderBox.addItem("Female");
-          genderBox.addItem("Other");
-          // Choose Activity level
-          JComboBox<String> activityBox = new JComboBox<>();
-          activityBox.addItem("");
-          activityBox.addItem("Little to no exercise");
-          activityBox.addItem("Moderate exercise");
-          activityBox.addItem("Active");
-          activityBox.addItem("Very Active");
-          // Registration details
-          JPanel registerPanel = new JPanel();
-          registerPanel.setLayout(registerLayout);
-          registerPanel.add(new JLabel(" Username:"));
-          registerPanel.add(usernameField);
-          registerPanel.add(new JLabel("Password:"));
-          registerPanel.add(passwordField);
-          registerPanel.add(new JLabel("Gender:"));
-          registerPanel.add(genderBox);
-          registerPanel.add(new JLabel("Age:"));
-          registerPanel.add(age);
-          registerPanel.add(new JLabel("Height (Inches):"));
-          registerPanel.add(heightField);
-          registerPanel.add(new JLabel("Weight (Lbs):"));
-          registerPanel.add(weight);
-          registerPanel.add(new JLabel("Activity Level:"));
-          registerPanel.add(activityBox);
-          // Confirm, failure, and success dialog 
-          int result = JOptionPane.showConfirmDialog(null, registerPanel, "User Registration",
-              JOptionPane.OK_CANCEL_OPTION);
-          if (result == JOptionPane.CANCEL_OPTION) {
-          } else if (connection.registerUser(usernameField.getText(), passwordField.getText(),
-              Objects.requireNonNull(genderBox.getSelectedItem()).toString(),
-              Integer.parseInt(weight.getText()), Integer.parseInt(heightField.getText()),
-              Objects.requireNonNull(activityBox.getSelectedItem()).toString(),
-              Integer.parseInt(age.getText())) == -1) {
-            System.out.println("Failed to register user");
-          } else {
-            JOptionPane.showMessageDialog(registerButton, "Success!");
-          }
-        }
-      });
-
-    });
-
-    mainPanel.add(loginButton);
-    mainPanel.add(registerButton);
-
-    cardPanel.add(mainPanel, "login");
-    cardPanel.add(dashPanel, "dash");
-
-    frame.add(cardPanel);
-    // Adjust frame settings
-    frame.setTitle("Fitrack");
-    frame.setMinimumSize(new Dimension(500, 500));
-    frame.setResizable(true);
-    frame.setVisible(true);
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    frame.pack();
-    frame.setLocationRelativeTo(null);
-    return frame;
   }
-  
-  
-  
+
+  private JTextField loginField;
+  private CardLayout cardLayout;
+  private JPanel cards;
+  private JTextField passField;
+  private FitrackDatabase connection;
+
 }
