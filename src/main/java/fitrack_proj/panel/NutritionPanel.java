@@ -96,7 +96,6 @@ public class NutritionPanel extends JPanel {
         String exerciseType = historySet.getString("exercise_type");
         int exerciseDuration = historySet.getInt("exercise_time");
         map.put(exerciseType, exerciseDuration);
-        chart.addSeries(exerciseType, exerciseDuration);
       }
     } catch (SQLException sqe) {
       System.out.println("Failed to update chart");

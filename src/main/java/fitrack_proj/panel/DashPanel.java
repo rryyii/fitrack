@@ -93,9 +93,9 @@ public class DashPanel extends JPanel {
 
     JTextArea status = new JTextArea();
     status.setEditable(false);
-    status.setText("Welcome back " + userInfo.getUsername() + "!\n" + "Current Height: "
-        + userInfo.getHeight() + " inches\n" + "Current Weight: " + userInfo.getWeight() + " lbs\n"
-        + "\n");
+    status.setText(
+        "Welcome back " + userInfo.getUsername() + "!\n" + "Current Height: " + userInfo.getHeight()
+            + " inches\n" + "Current Weight: " + userInfo.getWeight() + " lbs\n" + "\n");
     consts.gridx = 0;
     consts.gridy = 0;
     consts.gridwidth = 2;
@@ -132,7 +132,7 @@ public class DashPanel extends JPanel {
     DefaultTableModel dftm = new DefaultTableModel(column, 0);
     JTable table = new JTable(dftm);
     table.setVisible(true);
-    updateHistory(dftm, 1);
+    updateHistory(dftm);
     this.add(table, consts);
 
     consts.gridy = 5;
@@ -146,28 +146,56 @@ public class DashPanel extends JPanel {
       SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {
-          ResultSet result = updateHistory(dftm, 1);
+          ResultSet result = updateHistory(dftm);
           showNutrition.updateChart(result);
           frame.pack();
         }
       });
     });
     this.add(exerciseButton, consts);
+    
     JLabel nutritionLabel = new JLabel("Nutrition Tracker: ");
     this.add(nutritionLabel);
+    
+    JLabel foodLabel = new JLabel("Food: ");
+    JTextField foodField = new JTextField(20);
+    this.add(foodLabel);
+    this.add(foodField);
+    
+    JLabel servingLabel = new JLabel("Servings: ");
+    JTextField servingField = new JTextField(20);
+    this.add(servingLabel);
+    this.add(servingField);
+    
     String column2[] = {"Food", "Calories", "date"};
-    DefaultTableModel dftm2 = new DefaultTableModel(column2, 0);
-    JTable table2 = new JTable(dftm2);
+    DefaultTableModel dftmN = new DefaultTableModel(column2, 0);
+    JTable nutritionTable = new JTable(dftmN);
     table.setVisible(true);
-    updateHistory(dftm2, 2);
-    this.add(table2);
+    updateHistory(dftmN);
+    this.add(nutritionTable);
     
-    
+    JButton exerciseButton2 = new JButton("Submit");
+    exerciseButton2.addActionListener(e -> {
+      connection.insertNutrition(userInfo.getUserId(), foodField.getText(),
+          Integer.parseInt(servingField.getText()));
+      SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+          ResultSet result = updateNutrition(dftmN);
+          showNutrition.updateChart(result);
+          frame.pack();
+        }
+      });
+    });
+    this.add(exerciseButton2);
+
+
     consts.gridx = 0;
     consts.gridy = 8;
     consts.gridheight = 1;
     consts.gridwidth = 2;
     consts.fill = GridBagConstraints.HORIZONTAL;
+    
     final JPanel nutritionPanel =
         showNutrition.createChart(retrieveHistory(connection, userInfo.getUserId()), this.frame);
     JButton chartButton = new JButton("Show Chart");
@@ -185,34 +213,38 @@ public class DashPanel extends JPanel {
     clearHistory(dftm);
   }
 
-  private ResultSet updateHistory(DefaultTableModel table, Integer type) {
+  private ResultSet updateHistory(DefaultTableModel table) {
     table.setRowCount(0);
-    ResultSet exerciseSet = null;
-    ResultSet nutritionSet = null;
-    String exerciseType = "";
-    int exerciseDuration = 0;
-    Date exerciseDate = null;
-    try { 
-    if (type == 1) {
-      exerciseSet = retrieveHistory(connection, userInfo.getUserId());
-      exerciseType = exerciseSet.getString("exercise_type");
-      exerciseDuration = exerciseSet.getInt("exercise_time");
-      exerciseDate = exerciseSet.getDate("date");
-    } else {
-      nutritionSet = retrieveNutrition(connection, userInfo.getUserId());
-      exerciseType = nutritionSet.getString("food_name");
-      exerciseDuration = nutritionSet.getInt("serving_count");
-      exerciseDate = nutritionSet.getDate("date");
-    }
-    while (exerciseSet.next()) {
-      Object[] results = {exerciseType, exerciseDuration, exerciseDate};
-      table.addRow(results);
-    }
+    ResultSet exerciseSet = retrieveHistory(connection, userInfo.getUserId());
+    try {
+      while (exerciseSet.next()) {
+        String exerciseType = exerciseSet.getString("exercise_type");
+        int exerciseDuration = exerciseSet.getInt("exercise_time");
+        Date exerciseDate = exerciseSet.getDate("date");
+        Object[] results = {exerciseType, exerciseDuration, exerciseDate};
+        table.addRow(results);
+      }
     } catch (SQLException sqe) {
-      
     }
     return exerciseSet;
   }
+
+  private ResultSet updateNutrition(DefaultTableModel table) {
+    table.setRowCount(0);
+    ResultSet exerciseSet = retrieveNutrition(connection, userInfo.getUserId());
+    try {
+      while (exerciseSet.next()) {
+        String foodName = exerciseSet.getString("food_name");
+        int serving_count = exerciseSet.getInt("serving_count");
+        Date date = exerciseSet.getDate("date");
+        Object[] results = {foodName, serving_count, date};
+        table.addRow(results);
+      }
+    } catch (SQLException sqe) {
+    }
+    return exerciseSet;
+  }
+
 
 
   private void clearHistory(DefaultTableModel table) {
@@ -230,7 +262,7 @@ public class DashPanel extends JPanel {
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (paneResult == JOptionPane.YES_OPTION) {
               connection.clearHistory(userInfo.getUserId());
-              updateHistory(table, 1);
+              updateHistory(table);
             }
           }
 
@@ -252,7 +284,7 @@ public class DashPanel extends JPanel {
   private static ResultSet retrieveHistory(FitrackDatabase connection, int userid) {
     return connection.retrieveHistory(userid);
   }
-  
+
   /**
    * Retrieves the given user's exercise history.
    *

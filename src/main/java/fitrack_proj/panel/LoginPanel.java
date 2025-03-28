@@ -121,7 +121,7 @@ public class LoginPanel {
           registerPanel.add(weight);
           registerPanel.add(new JLabel("Activity Level:"));
           registerPanel.add(activityBox);
-
+          // Confirm, failure, and success dialog 
           int result = JOptionPane.showConfirmDialog(null, registerPanel, "User Registration",
               JOptionPane.OK_CANCEL_OPTION);
           if (result == JOptionPane.CANCEL_OPTION) {
@@ -156,5 +156,7 @@ public class LoginPanel {
     frame.setLocationRelativeTo(null);
     return frame;
   }
+  
+  
   
 }

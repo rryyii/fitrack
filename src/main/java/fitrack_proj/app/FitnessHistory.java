@@ -54,7 +54,7 @@ public class FitnessHistory {
   }
 
   /**
-   * Calculates user's recommended calories based on user's information.
+   * Calculates user's recommended calories to stay at the same body weight based on user's information.
    *
    * @param weight Weight of user
    * @param height Height of user
@@ -89,5 +89,7 @@ public class FitnessHistory {
     }
     return amr;
   }
+  
+  
 
 }

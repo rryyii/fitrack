@@ -22,11 +22,9 @@ class NutritionTest {
   @Test
   void testInsertNutrition() {
     setUp();
-    Date now = new Date(0);
-    Date date = new Date(now.getTime());
     String food_name = "cherries";
     int serving_count = 20;
-    assertEquals(1, connection.insertNutrition(1 , date, food_name, serving_count));
+    assertEquals(1, connection.insertNutrition(1, food_name, serving_count));
   }
   
   @Test
