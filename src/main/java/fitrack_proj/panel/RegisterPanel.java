@@ -8,6 +8,10 @@ import javax.swing.*;
 import fitrack_proj.util.FitrackDatabase;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * RegisterPanel class creates the registration panel for the user to
+ * register for an account.
+ */
 public class RegisterPanel extends JPanel implements ActionListener {
 
   public RegisterPanel(JPanel cards, FitrackDatabase connection) {

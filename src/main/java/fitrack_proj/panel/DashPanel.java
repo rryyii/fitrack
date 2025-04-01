@@ -9,6 +9,10 @@ import fitrack_proj.util.FitrackDatabase;
 import fitrack_proj.util.UserInfo;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * DashPanel class creates the dashboard panel for the user to view their
+ * exercise and nutrition history.
+ */ 
 public class DashPanel extends JPanel {
 
   /**
@@ -55,7 +59,7 @@ public class DashPanel extends JPanel {
     DefaultTableModel exerciseTable = new DefaultTableModel(column, 0);
     historyTable = new JTable(exerciseTable);
     historyTable.setVisible(true);
-    updateHistory(exerciseTable);
+    updateHistory();
     add(historyTable, "wrap");
 
     exerciseButton = new JButton("Submit");
@@ -68,7 +72,7 @@ public class DashPanel extends JPanel {
       SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {
-          updateHistory(exerciseTable);
+          updateHistory();
         }
       });
     });
@@ -96,7 +100,7 @@ public class DashPanel extends JPanel {
     DefaultTableModel nutritionTable = new DefaultTableModel(foodColumn, 0);
     foodTable = new JTable(nutritionTable);
     foodTable.setVisible(true);
-    updateHistory(nutritionTable);
+    updateHistory();
     add(foodTable, "wrap");
 
     foodButton = new JButton("Submit");
@@ -106,7 +110,7 @@ public class DashPanel extends JPanel {
       SwingUtilities.invokeLater(new Runnable() {
         @Override
         public void run() {
-          updateNutrition(nutritionTable);
+          updateNutrition();
         }
       });
     });
@@ -131,7 +135,8 @@ public class DashPanel extends JPanel {
    * 
    * @param table The table to update with new data
    */
-  private void updateHistory(DefaultTableModel table) {
+  private void updateHistory() {
+    DefaultTableModel table = (DefaultTableModel) historyTable.getModel();
     table.setRowCount(0);
     ResultSet exerciseSet = retrieveHistory(connection, userInfo.getUserId());
     try {
@@ -157,7 +162,8 @@ public class DashPanel extends JPanel {
     return connection.retrieveNutrition(userid);
   }
 
-  private ResultSet updateNutrition(DefaultTableModel table) {
+  private ResultSet updateNutrition() {
+    DefaultTableModel table = (DefaultTableModel) foodTable.getModel();
     table.setRowCount(0);
     ResultSet exerciseSet = retrieveNutrition(connection, userInfo.getUserId());
     try {
@@ -172,6 +178,7 @@ public class DashPanel extends JPanel {
     }
     return exerciseSet;
   }
+  
 
   private JPanel cards;
   private UserInfo userInfo;

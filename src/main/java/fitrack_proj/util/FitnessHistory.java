@@ -1,6 +1,13 @@
-package fitrack_proj.app;
+package fitrack_proj.util;
 
 import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
+import fitrack_proj.enums.ExerciseType;
+import fitrack_proj.enums.NutritionType;
 
 /**
  * Routine Class.
@@ -8,8 +15,7 @@ import java.util.HashMap;
  * @author yirw
  */
 public class FitnessHistory {
-  private static final HashMap<Integer, String> exerciseKeys = new HashMap<>();
-  private static final HashMap<Integer, Double> metValues = new HashMap<>();
+  public static final HashMap<NutritionType, NutritionMap> dailyNutrientValues = new HashMap<>();
 
   public FitnessHistory() {
     initializeMaps();
@@ -19,15 +25,14 @@ public class FitnessHistory {
    * Initializes the two HashMaps containing exercises and their met values.
    */
   private void initializeMaps() {
-    exerciseKeys.put(1, "sports");
-    exerciseKeys.put(2, "biking");
-    exerciseKeys.put(3, "resistance");
-    exerciseKeys.put(4, "cardio");
-
-    metValues.put(1, 7.8);
-    metValues.put(2, 7.5);
-    metValues.put(3, 3.5);
-    metValues.put(4, 8.0);
+    dailyNutrientValues.put(NutritionType.ADDED_SUGARS, new NutritionMap(50.0, "g"));
+    dailyNutrientValues.put(NutritionType.CALCIUM, new NutritionMap(1300.0, "mg"));
+    dailyNutrientValues.put(NutritionType.CHOLESTEROL, new NutritionMap(300.0, "mg"));
+    dailyNutrientValues.put(NutritionType.DIETARY_FIBER, new NutritionMap(28.0, "g"));
+    dailyNutrientValues.put(NutritionType.FAT, new NutritionMap(78.0, "g"));
+    dailyNutrientValues.put(NutritionType.PROTEIN, new NutritionMap(50.0, "g"));
+    dailyNutrientValues.put(NutritionType.SODIUM, new NutritionMap(2300.0, "mg"));
+    dailyNutrientValues.put(NutritionType.CARBOHYDRATE, new NutritionMap(275.0, "g"));
   }
 
   private static double convertMetric(double measurement, String system) {
@@ -45,16 +50,18 @@ public class FitnessHistory {
    *
    * @return Double value of the burnt calories
    */
-  public static double calculateBurntCal(int exerciseType, int timeElapsed, double weight) {
+  public static double calculateBurntCal(ExerciseType exerciseType, int timeElapsed,
+      double weight) {
     double burntCalories = 0.0;
-    double metValue = metValues.get(exerciseType);
+    double metValue = exerciseType.getValue();
     burntCalories = metValue * 3.5 * weight / 200;
     // met value * 3.5 * weight/200 = calories burnt per minute
     return burntCalories * timeElapsed;
   }
 
   /**
-   * Calculates user's recommended calories to stay at the same body weight based on user's information.
+   * Calculates user's recommended calories to stay at the same body weight based on user's
+   * information.
    *
    * @param weight Weight of user
    * @param height Height of user
@@ -89,7 +96,18 @@ public class FitnessHistory {
     }
     return amr;
   }
-  
-  
+
+}
+
+
+class NutritionMap {
+
+  public NutritionMap(double amount, String unit) {
+    this.amount = amount;
+    this.unit = unit;
+  }
+
+  public double amount;
+  public String unit;
 
 }

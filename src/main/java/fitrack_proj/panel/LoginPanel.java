@@ -50,7 +50,6 @@ public class LoginPanel extends JPanel implements ActionListener {
   private JButton registerButton;
   private JTextField loginField;
   private JPasswordField passField;
-  private JTextArea displayInfo;
   private JLabel userLabel;
   private JLabel passLabel;
   private JPanel cards;
