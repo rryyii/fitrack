@@ -9,46 +9,61 @@ import fitrack_proj.util.FitrackDatabase;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * RegisterPanel class creates the registration panel for the user to
- * register for an account.
+ * RegisterPanel class creates the registration panel for the user to register for an account.
  */
 public class RegisterPanel extends JPanel implements ActionListener {
 
+  /**
+   * RegisterPanel main constructor
+   *
+   * @param cards Cards to allow for displaying different panels
+   * @param connection Current connection to the database
+   */
   public RegisterPanel(JPanel cards, FitrackDatabase connection) {
     super(new MigLayout());
     this.connection = connection;
     this.cards = cards;
+    add(createRegisterComponents());
+  }
+
+  /**
+   * Creates the main register panel for the user to input their information
+   * 
+   * @return JPanel panel of the main registration Swing components
+   */
+  public JPanel createRegisterComponents() {
+    JPanel panel = new JPanel();
     usernameLabel = new JLabel("Enter a username: ");
-    add(usernameLabel);
+    panel.add(usernameLabel);
     usernameField = new JTextField(15);
-    add(usernameField, "wrap");
+    panel.add(usernameField, "wrap");
 
     passwordLabel = new JLabel("Enter a password: ");
-    add(passwordLabel);
+    panel.add(passwordLabel);
     passwordField = new JPasswordField(15);
-    add(passwordField, "wrap");
+    panel.add(passwordField, "wrap");
 
     genderLabel = new JLabel("Enter your sex: ");
-    add(genderLabel);
+    panel.add(genderLabel);
 
     genderField = new JComboBox<>();
     genderField.addItem("");
     genderField.addItem("Male");
     genderField.addItem("Female");
-    add(genderField, "wrap");
+    panel.add(genderField, "wrap");
 
     weightLabel = new JLabel("Enter your weight: ");
-    add(weightLabel);
+    panel.add(weightLabel);
     weightField = new JTextField(3);
-    add(weightField, "wrap");
+    panel.add(weightField, "wrap");
 
     heightLabel = new JLabel("Enter your height: ");
-    add(heightLabel);
+    panel.add(heightLabel);
     heightField = new JTextField(10);
-    add(heightField, "wrap");
+    panel.add(heightField, "wrap");
 
     activityLabel = new JLabel("Enter your current activity level: ");
-    add(activityLabel);
+    panel.add(activityLabel);
 
     activityField = new JComboBox<>();
     activityField.addItem("");
@@ -56,17 +71,17 @@ public class RegisterPanel extends JPanel implements ActionListener {
     activityField.addItem("Moderate exercise");
     activityField.addItem("Active");
     activityField.addItem("Very Active");
-    add(activityField, "wrap");
+    panel.add(activityField, "wrap");
 
     ageLabel = new JLabel("Enter your age: ");
-    add(ageLabel);
+    panel.add(ageLabel);
     ageField = new JTextField(3);
-    add(ageField, "wrap");
+    panel.add(ageField, "wrap");
 
     submitButton = new JButton("Submit");
     submitButton.addActionListener(this);
-    add(submitButton);
-
+    panel.add(submitButton);
+    return panel;
   }
 
   @Override

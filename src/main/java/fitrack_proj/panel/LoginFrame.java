@@ -4,12 +4,21 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import fitrack_proj.util.FitrackDatabase;
 
+/**
+ * LoginFrame class that creates the main JFrame and adds the base JPanels
+ * 
+ */
 public class LoginFrame extends JFrame {
+  
+  /**
+   * LoginFrame Main Constructor
+   */
   public LoginFrame() {
-    FlatLightLaf.setup();
+    FlatDarculaLaf.setup();
     FitrackDatabase connection = new FitrackDatabase();
     JPanel cards = new JPanel(new CardLayout());
     cards.add(new LoginPanel(cards, connection), "LOGINPANEL");

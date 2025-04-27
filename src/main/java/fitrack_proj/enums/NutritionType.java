@@ -1,5 +1,9 @@
 package fitrack_proj.enums;
 
+/**
+ * NutritionType enum for the different nutritional types.
+ * 
+ */
 public enum NutritionType {
   ADDED_SUGARS(1),
   CALCIUM(2),
@@ -12,10 +16,20 @@ public enum NutritionType {
 
   private final int value;
 
+  /**
+   * NutritionType main constructor.
+   * 
+   * @param value Int value for associated  type
+   */
  NutritionType(int value) {
     this.value = value;
   }
 
+ /**
+  * Returns the currently set value.
+  *
+  * @return Int of the current value
+  */
   public int getValue() {
     return value;
   }

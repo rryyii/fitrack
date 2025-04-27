@@ -1,5 +1,7 @@
 package fitrack_proj.panel;
 
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -10,9 +12,9 @@ import fitrack_proj.util.UserInfo;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * DashPanel class creates the dashboard panel for the user to view their
- * exercise and nutrition history.
- */ 
+ * DashPanel class creates the dashboard panel for the user to view their exercise and nutrition
+ * history.
+ */
 public class DashPanel extends JPanel {
 
   /**
@@ -27,7 +29,11 @@ public class DashPanel extends JPanel {
     this.cards = cards;
     this.connection = connection;
     userInfo = new UserInfo(user_id, connection);
+    CardLayout layout = (CardLayout) this.cards.getLayout();
 
+
+    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(cards);
+    frame.setJMenuBar(createMenuBar(layout));
 
     status = new JTextArea();
     status.setEditable(false);
@@ -36,8 +42,21 @@ public class DashPanel extends JPanel {
         userInfo.getWeight()));
     add(status, "wrap");
 
+    add(createExercisePanel());
+    add(createNutritionPanel());
+  }
+  
+  /**
+   * Creates the main panel for inputting exercise into the user's history.
+   * 
+   * @return JPanel panel with the added exercise Swing components
+   */
+  public JPanel createExercisePanel() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new MigLayout());
+    panel.setBackground(new Color(105, 109, 125));
     exerciseSelectLabel = new JLabel("Select performed exercise or activity type:");
-    add(exerciseSelectLabel);
+    panel.add(exerciseSelectLabel);
 
     exerciseBox = new JComboBox<>();
     exerciseBox.addItem("");
@@ -45,22 +64,22 @@ public class DashPanel extends JPanel {
     exerciseBox.addItem("Biking");
     exerciseBox.addItem("Conditioning (resistance training)");
     exerciseBox.addItem("Cardio");
-    add(exerciseBox, "wrap");
+    panel.add(exerciseBox, "wrap");
 
     exerciseTimeLabel = new JLabel("Enter elapsed time (in minutes):");
-    add(exerciseTimeLabel);
+    panel.add(exerciseTimeLabel);
     elapsedField = new JTextField(10);
-    add(elapsedField, "wrap");
+    panel.add(elapsedField, "wrap");
 
     exerciseHistoryLabel = new JLabel("Exercise History:");
-    add(exerciseHistoryLabel, "wrap");
+    panel.add(exerciseHistoryLabel, "wrap");
 
     String column[] = {"Exercise Type", "Duration", "Date"};
     DefaultTableModel exerciseTable = new DefaultTableModel(column, 0);
     historyTable = new JTable(exerciseTable);
     historyTable.setVisible(true);
     updateHistory();
-    add(historyTable, "wrap");
+    panel.add(historyTable, "wrap");
 
     exerciseButton = new JButton("Submit");
     exerciseButton.addActionListener(e -> {
@@ -76,24 +95,33 @@ public class DashPanel extends JPanel {
         }
       });
     });
-    add(exerciseButton, "wrap 30px");
+    panel.add(exerciseButton, "wrap 30px");
+    return panel;
+  }
 
-
+  /**
+   * Creates a new panel for inputting nutrition information for the user.
+   * 
+   * @return JPanel panel with the added nutritional Swing components
+   */
+  public JPanel createNutritionPanel() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new MigLayout());
     nutritionLabel = new JLabel("Nutrition Tracker: ");
-    add(nutritionLabel, "wrap");
+    panel.add(nutritionLabel, "wrap");
 
     foodNameLabel = new JLabel("Food Name: ");
-    add(foodNameLabel);
+    panel.add(foodNameLabel);
     foodNameField = new JTextField(10);
-    add(foodNameField, "wrap");
+    panel.add(foodNameField, "wrap");
 
     servingLabel = new JLabel("Servings: ");
-    add(servingLabel);
+    panel.add(servingLabel);
     servingField = new JTextField(10);
-    add(servingField, "wrap");
+    panel.add(servingField, "wrap");
 
     foodHistoryLabel = new JLabel("Food History:");
-    add(foodHistoryLabel, "wrap");
+    panel.add(foodHistoryLabel, "wrap");
 
 
     String foodColumn[] = {"Food", "Calories", "Date"};
@@ -101,7 +129,7 @@ public class DashPanel extends JPanel {
     foodTable = new JTable(nutritionTable);
     foodTable.setVisible(true);
     updateHistory();
-    add(foodTable, "wrap");
+    panel.add(foodTable, "wrap");
 
     foodButton = new JButton("Submit");
     foodButton.addActionListener(e -> {
@@ -114,7 +142,46 @@ public class DashPanel extends JPanel {
         }
       });
     });
-    add(foodButton);
+    panel.add(foodButton);
+    return panel;
+  }
+
+  /**
+   * Creates a menu bar for the main JFrame.
+   * 
+   * @param layout CardLayout so the menu bar items can show the selected panel
+   * @return JMenuBar menuBar with the added Swing components 
+   */
+  public JMenuBar createMenuBar(CardLayout layout) {
+    JMenuBar menuBar = new JMenuBar();
+    JMenu profileMenu = new JMenu("Profile");
+    JMenuItem home = new JMenuItem("Home");
+    home.addActionListener(e -> {
+      layout.show(this.cards, "DASHPANEL");
+    });
+    JMenuItem profile = new JMenuItem("Profile");
+    profile.addActionListener(e -> {
+      this.cards.add(new ProfilePanel(), "PROFILEPANEL");
+      layout.show(this.cards, "PROFILEPANEL");
+    });
+    JMenuItem goals = new JMenuItem("Goals");
+    goals.addActionListener(e -> {
+      this.cards.add(new GoalPanel(), "GOALPANEL");
+      layout.show(this.cards, "GOALPANEL");
+    });
+    JMenuItem logout = new JMenuItem("Logout");
+    logout.addActionListener(e -> {
+      this.cards.removeAll();
+      this.cards.add(new LoginPanel(cards, connection));
+      this.cards.repaint();
+      this.cards.revalidate();
+    });
+    menuBar.add(profileMenu);
+    profileMenu.add(home);
+    profileMenu.add(profile);
+    profileMenu.add(goals);
+    profileMenu.add(logout);
+    return menuBar;
   }
 
 
@@ -162,6 +229,11 @@ public class DashPanel extends JPanel {
     return connection.retrieveNutrition(userid);
   }
 
+  /**
+   * Updates the nutrition table with new data.
+   * 
+   * @return ResultSet exerciseSet that contains data for the user's nutrition history
+   */
   private ResultSet updateNutrition() {
     DefaultTableModel table = (DefaultTableModel) foodTable.getModel();
     table.setRowCount(0);
@@ -178,7 +250,7 @@ public class DashPanel extends JPanel {
     }
     return exerciseSet;
   }
-  
+
 
   private JPanel cards;
   private UserInfo userInfo;

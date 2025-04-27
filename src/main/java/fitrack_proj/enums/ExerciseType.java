@@ -1,5 +1,9 @@
 package fitrack_proj.enums;
 
+/**
+ * ExerciseType enum for the exercise input.
+ *
+ */
 public enum ExerciseType {
   SPORTS(1),
   BIKING(2),
@@ -8,10 +12,20 @@ public enum ExerciseType {
 
   private final int value;
 
+  /**
+   * ExerciseType main constructor.
+   * 
+   * @param value to retrieve associated enum
+   */
   ExerciseType(int value) {
     this.value = value;
   }
 
+  /**
+   * Returns the value associated with the exercise type.
+   * 
+   * @return Int value of the exercise type.
+   */
   public int getValue() {
     return value;
   }

@@ -16,8 +16,13 @@ public class LoginPanel extends JPanel implements ActionListener {
    * @param connection Established SQL database connection
    */
   public LoginPanel(JPanel cards, FitrackDatabase connection) {
-    super(new MigLayout("wrap 2"));
+    super(new MigLayout("wrap 1"));
     this.cards = cards;
+    add(createUserInfoPanel(connection));
+  }
+  
+  public JPanel createUserInfoPanel(FitrackDatabase connection) {
+    JPanel panel = new JPanel();
     loginField = new JTextField(15);
     passField = new JPasswordField(15);
 
@@ -32,12 +37,13 @@ public class LoginPanel extends JPanel implements ActionListener {
     userLabel = new JLabel("Username: ");
     passLabel = new JLabel("Password: ");
     
-    add(userLabel);
-    add(loginField);
-    add(passLabel);
-    add(passField);
-    add(loginButton);
-    add(registerButton);
+    this.add(userLabel);
+    this.add(loginField);
+    this.add(passLabel);
+    this.add(passField);
+    this.add(loginButton);
+   this. add(registerButton);
+    return panel;
   }
 
   @Override
