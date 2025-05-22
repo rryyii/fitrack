@@ -12,12 +12,12 @@ import fitrack_proj.util.FitrackDatabase;
  * LoginFrame class that creates the main JFrame and adds the base JPanels
  * 
  */
-public class LoginFrame extends JFrame {
+public class FitrackFrame extends JFrame {
   
   /**
    * LoginFrame Main Constructor
    */
-  public LoginFrame() {
+  public FitrackFrame() {
     FlatDarculaLaf.setup();
     FitrackDatabase connection = new FitrackDatabase();
     JPanel cards = new JPanel(new CardLayout());
@@ -27,7 +27,8 @@ public class LoginFrame extends JFrame {
     
     pack();
     setTitle("Fitrack");
-    setMinimumSize(new Dimension(500, 500));
+    setMinimumSize(new Dimension(700, 700));
+    setMaximumSize(new Dimension(700, 700));
     setVisible(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
   }

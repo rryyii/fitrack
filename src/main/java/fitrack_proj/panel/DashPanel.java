@@ -25,7 +25,8 @@ public class DashPanel extends JPanel {
    * @param user_id Currently logged in user's id
    */
   public DashPanel(JPanel cards, FitrackDatabase connection, int user_id) {
-    super(new MigLayout());
+    super(new MigLayout("wrap 1"));
+  
     this.cards = cards;
     this.connection = connection;
     userInfo = new UserInfo(user_id, connection);
@@ -166,7 +167,7 @@ public class DashPanel extends JPanel {
     });
     JMenuItem goals = new JMenuItem("Goals");
     goals.addActionListener(e -> {
-      this.cards.add(new GoalPanel(), "GOALPANEL");
+      this.cards.add(new GoalPanel(userInfo), "GOALPANEL");
       layout.show(this.cards, "GOALPANEL");
     });
     JMenuItem logout = new JMenuItem("Logout");

@@ -3,11 +3,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Local configuration file ###
 .env
-
-.idea
-
 src/main/java/fitrack_proj/util
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -17,6 +16,7 @@ src/main/java/fitrack_proj/util
 *.iws
 *.iml
 *.ipr
+.idea
 
 ### Eclipse ###
 .apt_generated

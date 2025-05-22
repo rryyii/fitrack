@@ -1,6 +1,6 @@
 package fitrack_proj.app;
 
-import fitrack_proj.panel.LoginFrame;
+import fitrack_proj.panel.FitrackFrame;
 
 /**
  * FitrackApp main class to run the application.
@@ -8,6 +8,6 @@ import fitrack_proj.panel.LoginFrame;
  */
 public class FitrackApp {
   public static void main(String[] args) {
-    LoginFrame login = new LoginFrame();
+    FitrackFrame login = new FitrackFrame();
   }
 }
