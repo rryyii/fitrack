@@ -25,10 +25,12 @@ public class FitrackFrame extends JFrame {
     cards.add(new RegisterPanel(cards, connection), "REGISTERPANEL");
     add(cards);
     
+     
     pack();
     setTitle("Fitrack");
-    setMinimumSize(new Dimension(700, 700));
-    setMaximumSize(new Dimension(700, 700));
+    setMinimumSize(new Dimension(150, 350));
+    setMaximumSize(new Dimension(150, 350));
+    setSize(new Dimension(150, 350));
     setVisible(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
   }

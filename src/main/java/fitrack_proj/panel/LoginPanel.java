@@ -42,7 +42,7 @@ public class LoginPanel extends JPanel implements ActionListener {
     this.add(passLabel);
     this.add(passField);
     this.add(loginButton);
-   this. add(registerButton);
+    this.add(registerButton);
     return panel;
   }
 

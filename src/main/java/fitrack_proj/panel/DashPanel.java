@@ -34,17 +34,17 @@ public class DashPanel extends JPanel {
 
 
     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(cards);
-    frame.setJMenuBar(createMenuBar(layout));
 
     status = new JTextArea();
     status.setEditable(false);
-    String statusText = "Welcome back %s !\n Current Height: %d inches \n Current Weigh: %d lbs \n";
+    String statusText = "Welcome back %s !\n Current Height: %d inches \n Current Weight: %d lbs \n";
     status.setText(String.format(statusText, userInfo.getUsername(), userInfo.getHeight(),
         userInfo.getWeight()));
     add(status, "wrap");
 
     add(createExercisePanel());
     add(createNutritionPanel());
+    add(createMenuPanel(layout), "dock west");
   }
   
   /**
@@ -55,7 +55,6 @@ public class DashPanel extends JPanel {
   public JPanel createExercisePanel() {
     JPanel panel = new JPanel();
     panel.setLayout(new MigLayout());
-    panel.setBackground(new Color(105, 109, 125));
     exerciseSelectLabel = new JLabel("Select performed exercise or activity type:");
     panel.add(exerciseSelectLabel);
 
@@ -162,12 +161,12 @@ public class DashPanel extends JPanel {
     });
     JMenuItem profile = new JMenuItem("Profile");
     profile.addActionListener(e -> {
-      this.cards.add(new ProfilePanel(), "PROFILEPANEL");
+      this.cards.add(new ProfilePanel(userInfo, connection, cards), "PROFILEPANEL");
       layout.show(this.cards, "PROFILEPANEL");
     });
     JMenuItem goals = new JMenuItem("Goals");
     goals.addActionListener(e -> {
-      this.cards.add(new GoalPanel(userInfo), "GOALPANEL");
+      this.cards.add(new GoalPanel(userInfo, connection, cards), "GOALPANEL");
       layout.show(this.cards, "GOALPANEL");
     });
     JMenuItem logout = new JMenuItem("Logout");
@@ -183,6 +182,38 @@ public class DashPanel extends JPanel {
     profileMenu.add(goals);
     profileMenu.add(logout);
     return menuBar;
+  }
+  
+  public JPanel createMenuPanel(CardLayout layout) {
+	  JPanel panel = new JPanel();
+	  panel.setLayout(new MigLayout("wrap 1"));
+	  panel.setBackground(new Color(0, 0, 0));
+	  JButton home = new JButton("Home");
+	  home.addActionListener(e -> {
+	      layout.show(this.cards, "DASHPANEL");
+	  });
+	  panel.add(home);
+	  JButton profile = new JButton("Profile");
+	  profile.addActionListener(e -> {
+		   this.cards.add(new ProfilePanel(userInfo, connection, cards), "PROFILEPANEL");
+		      layout.show(this.cards, "PROFILEPANEL");
+	  });
+	  panel.add(profile);
+	  JButton goals = new JButton("Goals");
+	  goals.addActionListener(e -> {
+	      this.cards.add(new GoalPanel(userInfo, connection, cards), "GOALPANEL");
+	      layout.show(this.cards, "GOALPANEL");
+	  });
+	  panel.add(goals);
+	  JButton logout = new JButton("Logout");
+	  logout.addActionListener(e -> {
+	      this.cards.removeAll();
+	      this.cards.add(new LoginPanel(cards, connection));
+	      this.cards.repaint();
+	      this.cards.revalidate();
+	  });
+	  panel.add(logout);
+	  return panel;
   }
 
 
