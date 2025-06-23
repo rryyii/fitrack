@@ -1,14 +1,11 @@
-package fitrack_proj.enums;
+package fitrack_proj.model.enums;
 
 /**
  * ExerciseType enum for the exercise input.
  *
  */
 public enum ExerciseType {
-  SPORTS(1),
-  BIKING(2),
-  RESISTANCE(3),
-  CARDIO(4);
+  SPORTS(1), BIKING(2), RESISTANCE(3), CARDIO(4);
 
   private final int value;
 

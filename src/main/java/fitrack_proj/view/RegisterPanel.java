@@ -1,17 +1,17 @@
-package fitrack_proj.panel;
+package fitrack_proj.view;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 import javax.swing.*;
-import fitrack_proj.util.FitrackDatabase;
+import fitrack_proj.model.FitrackDatabase;
 import net.miginfocom.swing.MigLayout;
 
 /**
  * RegisterPanel class creates the registration panel for the user to register for an account.
  */
-public class RegisterPanel extends JPanel implements ActionListener {
+public class RegisterPanel extends JPanel {
 
   /**
    * RegisterPanel main constructor
@@ -19,9 +19,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
    * @param cards Cards to allow for displaying different panels
    * @param connection Current connection to the database
    */
-  public RegisterPanel(JPanel cards, FitrackDatabase connection) {
+  public RegisterPanel(JPanel cards) {
     super(new MigLayout());
-    this.connection = connection;
     this.cards = cards;
     add(createRegisterComponents());
   }
@@ -33,6 +32,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
    */
   public JPanel createRegisterComponents() {
     JPanel panel = new JPanel();
+    panel.setLayout(new MigLayout("wrap 1"));
     usernameLabel = new JLabel("Enter a username: ");
     panel.add(usernameLabel);
     usernameField = new JTextField(15);
@@ -79,29 +79,43 @@ public class RegisterPanel extends JPanel implements ActionListener {
     panel.add(ageField, "wrap");
 
     submitButton = new JButton("Submit");
-    submitButton.addActionListener(this);
     panel.add(submitButton);
     return panel;
   }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        if (connection.registerUser(usernameField.getText(), passwordField.getText(),
-            Objects.requireNonNull(genderField.getSelectedItem()).toString(),
-            Integer.parseInt(weightField.getText()), Integer.parseInt(heightField.getText()),
-            Objects.requireNonNull(activityField.getSelectedItem()).toString(),
-            Integer.parseInt(ageField.getText())) == -1) {
-          JOptionPane.showMessageDialog(null, "Failed to register.");
-        } else {
-          JOptionPane.showMessageDialog(null, "Success!");
-          ((CardLayout) cards.getLayout()).previous(cards);
-        }
-      }
-    });
+  public String getUserName() {
+    return this.usernameField.getText();
   }
+
+  public String getPassword() {
+    return this.passwordField.getText();
+  }
+
+  public String getGender() {
+    return this.genderField.getSelectedItem().toString();
+  }
+
+  public int getWeight() {
+    return Integer.parseInt(this.weightField.getText());
+  }
+
+  public int getUserHeight() {
+    return Integer.parseInt(this.heightField.getText());
+  }
+
+  public int getAge() {
+    return Integer.parseInt(this.ageField.getText());
+  }
+
+  public String getActivity() {
+    return this.activityField.getSelectedItem().toString();
+  }
+
+  public JButton getSubmit() {
+    return this.submitButton;
+  }
+
+
 
   private JLabel usernameLabel;
   private JLabel passwordLabel;
@@ -118,6 +132,5 @@ public class RegisterPanel extends JPanel implements ActionListener {
   private JComboBox<String> activityField;
   private JTextField ageField;
   private JButton submitButton;
-  private FitrackDatabase connection;
   private JPanel cards;
 }
