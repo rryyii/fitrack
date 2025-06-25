@@ -20,11 +20,10 @@ public class LoginPanel extends JPanel {
    */
   public LoginPanel(JPanel cards) {
     super(new MigLayout("wrap 1"));
-    this.cards = cards;
     add(createUserInfoPanel());
   }
 
-  public JPanel createUserInfoPanel() {
+  private JPanel createUserInfoPanel() {
     JPanel panel = new JPanel();
     loginField = new JTextField(15);
     passField = new JPasswordField(15);
@@ -70,6 +69,5 @@ public class LoginPanel extends JPanel {
   private JPasswordField passField;
   private JLabel userLabel;
   private JLabel passLabel;
-  private JPanel cards;
 
 }

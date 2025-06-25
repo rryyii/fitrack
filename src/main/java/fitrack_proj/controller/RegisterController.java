@@ -44,19 +44,6 @@ public class RegisterController {
     }
   }
 
-  private boolean validateUsername(String username) {
-    if (username.length() == 0) {
-      return false;
-    }
-    return true;
-  }
-
-  private boolean validateNumbers(int value) {
-    return false;
-  }
-
-
-
   private RegisterDAO model;
   private RegisterPanel panel;
   private LoginPanel loginPanel;

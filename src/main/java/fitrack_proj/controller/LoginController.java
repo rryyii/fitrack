@@ -1,24 +1,23 @@
 package fitrack_proj.controller;
 
-import java.awt.CardLayout;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
+import javax.swing.SwingUtilities;
+
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.dao.LoginDAO;
-import fitrack_proj.view.DashPanel;
 import fitrack_proj.view.LoginPanel;
 
 public class LoginController {
 
   public LoginController(LoginPanel panel, JPanel cards, FitrackDatabase connection,
-      PanelController panelController, DashController dashController) {
+      PanelController panelController, DashController dashController, JFrame frame) {
     this.connection = connection;
     this.model = new LoginDAO(connection.getConnection());
-    this.cards = cards;
     this.panel = panel;
     this.panelController = panelController;
+    this.frame = frame;
     this.dashController = dashController;
     userLogin();
   }
@@ -35,16 +34,19 @@ public class LoginController {
       JOptionPane.showMessageDialog(null, "Invalid Username and Password.");
     } else {
       panelController.createDashPanel(result, connection, model, dashController);
+      panelController.createRootPanel();
+      frame.add(panelController.getRootPanel());
       panelController.showDashPanel();
+      panelController.createNavigationPanel();
+      panelController.setRootPanel();
     }
   }
 
+  private JFrame frame;
   private LoginDAO model;
   private FitrackDatabase connection;
-  private JPanel cards;
   private LoginPanel panel;
   private PanelController panelController;
   private DashController dashController;
-  private GoalController goalController;
 
 }

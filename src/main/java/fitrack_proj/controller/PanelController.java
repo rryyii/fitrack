@@ -1,15 +1,18 @@
 package fitrack_proj.controller;
 
 import java.awt.CardLayout;
+
 import javax.swing.JPanel;
+
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
 import fitrack_proj.model.dao.LoginDAO;
 import fitrack_proj.view.DashPanel;
 import fitrack_proj.view.GoalPanel;
-import fitrack_proj.view.MainPanel;
+import fitrack_proj.view.NavigationPanel;
 import fitrack_proj.view.ProfilePanel;
 import fitrack_proj.view.RegisterPanel;
+import fitrack_proj.view.RootPanel;
 
 public class PanelController {
 
@@ -18,13 +21,26 @@ public class PanelController {
     this.layout = layout;
     this.connection = connection;
   }
-
-  public MainPanel getMainPanel() {
-    return this.mainPanel;
+  
+  public void createRootPanel() {
+  this.rootPanel = new RootPanel();
+  this.rootPanel.setMainPanel(this.cards);
+  }
+  
+  public void setRootPanel() {
+  this.rootPanel.setNavPanel(navigationPanel);
+  }
+  
+  public RootPanel getRootPanel() {
+  return this.rootPanel;
   }
 
-  public void createMainPanel() {
-    this.mainPanel = new MainPanel(this.cards, this, user);
+  public NavigationPanel getNavigationPanel() {
+    return this.navigationPanel;
+  }
+
+  public void createNavigationPanel() {
+    this.navigationPanel = new NavigationPanel(this.cards, this, user);
   }
 
 
@@ -118,17 +134,27 @@ public class PanelController {
   public FitrackDatabase getConnection() {
     return this.connection;
   }
+  
+  public void createProfileController() {
+	  this.profileController = new ProfileController();
+  }
+  
+  public ProfileController getProfileController() {
+	  return this.profileController;
+  }
 
+  private RootPanel rootPanel;
   private FitrackDatabase connection;
   private LoginDAO loginDAO;
   private DashController dashController;
   private GoalController goalController;
+  private ProfileController profileController;
   private User user;
   private JPanel cards;
   private CardLayout layout;
   private ProfilePanel profilePanel;
   private RegisterPanel registerPanel;
-  private MainPanel mainPanel;
+  private NavigationPanel navigationPanel;
   private DashPanel dashPanel;
   private GoalPanel goalPanel;
 

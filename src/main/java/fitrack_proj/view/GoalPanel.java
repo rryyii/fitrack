@@ -30,10 +30,14 @@ public class GoalPanel extends JPanel {
     this.goalController.setConnection(controller.getConnection());
     this.goalController.setPanel(this);
 
-    add(controller.getMainPanel(), "dock west");
     add(createGoalList());
-    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(cards);
-    frame.pack();
+    
+	SwingUtilities.invokeLater(() -> {
+		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		if (frame != null) {
+			frame.pack();
+		}
+	});
 
   }
 
@@ -42,7 +46,7 @@ public class GoalPanel extends JPanel {
    * 
    * @return JPanel panel with the added Swing components
    */
-  public JPanel createGoalList() {
+  private JPanel createGoalList() {
     JPanel panel = new JPanel();
     panel.setLayout(new MigLayout("wrap 2"));
 

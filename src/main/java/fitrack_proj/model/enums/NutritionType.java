@@ -5,8 +5,8 @@ package fitrack_proj.model.enums;
  * 
  */
 public enum NutritionType {
-  ADDED_SUGARS(1), CALCIUM(2), CHOLESTEROL(3), DIETARY_FIBER(4), FAT(5), PROTEIN(6), SODIUM(
-      7), CARBOHYDRATE(8);
+  ADDED_SUGARS(50), CALCIUM(1300), CHOLESTEROL(3), DIETARY_FIBER(4), FAT(78), PROTEIN(50), SODIUM(
+      7), CARBOHYDRATE(275);
 
   private final int value;
 
