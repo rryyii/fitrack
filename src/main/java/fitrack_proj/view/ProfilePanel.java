@@ -1,13 +1,12 @@
 package fitrack_proj.view;
 
-import javax.swing.JPanel;
-
-import java.awt.CardLayout;
-import java.awt.Color;
-
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import fitrack_proj.controller.PanelController;
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
@@ -21,36 +20,54 @@ public class ProfilePanel extends JPanel {
   /**
    * ProfilePanel main constructor
    */
-  public ProfilePanel(User userInfo,  JPanel cards, PanelController controller) {
-    super(new MigLayout("wrap 2"));
+  public ProfilePanel(User userInfo, JPanel cards, PanelController controller) {
+    super(new MigLayout("wrap 1"));
     this.user = userInfo;
     this.cards = cards;
-    
-    createProfile();
+
+
     add(controller.getMainPanel(), "dock west");
+    add(createProfile());
+    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(cards);
+    frame.pack();
   }
-  
-  private void createProfile() {
-    JLabel usernameLabel = new JLabel("Current Username: ");
-    JTextField userName = new JTextField(user.getUsername());
 
-    this.add(usernameLabel);
-    this.add(userName);
+  private JPanel createProfile() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new MigLayout("wrap 2"));
+    
+    JLabel usernameLabel = new JLabel("Username: ");
+    JButton userName = new JButton(user.getUsername());
+    userName.setBorderPainted(false);
+    panel.add(usernameLabel);
+    panel.add(userName);
+    
 
-    JLabel genderLabel = new JLabel("Current Gender: ");
-    JTextField gender = new JTextField(user.getGender());
-    this.add(genderLabel);
-    this.add(gender);
+    JLabel genderLabel = new JLabel("Gender: ");
+    JButton gender = new JButton(user.getGender());
+    gender.setBorderPainted(false);
+    panel.add(genderLabel);
+    panel.add(gender);
+;
+
+    JLabel heightLabel = new JLabel("Height: ");
+    JButton heightField = new JButton(String.valueOf(user.getHeight()));
+    heightField.setBorderPainted(false);
+    panel.add(heightLabel);
+    panel.add(heightField);
     
-    JLabel activityLabel = new JLabel("Current Activity Level: ");
-    JTextField activityField = new JTextField();
-    this.add(activityLabel);
-    this.add(activityField);
+    JLabel weightLabel = new JLabel("Weight: ");
+    JButton weightField = new JButton(String.valueOf(user.getWeight()));
+    weightField.setBorderPainted(false);
+    panel.add(weightLabel);
+    panel.add(weightField);    
     
-    JLabel heightLabel = new JLabel("Current Height: ");
-    JTextField heightField = new JTextField();
-    this.add(heightLabel);
-    this.add(heightField);
+    JLabel activityLabel = new JLabel("Activity Level: ");
+    JButton activityField = new JButton(String.valueOf(user.getActivityLevel()));
+    activityField.setBorderPainted(false);
+    panel.add(activityLabel);
+    panel.add(activityField);
+    return panel;
   }
 
 

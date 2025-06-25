@@ -5,7 +5,7 @@ target/
 
 ### Local configuration file ###
 .env
-src/main/java/fitrack_proj/util
+src/main/java/fitrack_proj/util/
 
 
 ### IntelliJ IDEA ###

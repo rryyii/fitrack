@@ -45,5 +45,6 @@ public class LoginController {
   private LoginPanel panel;
   private PanelController panelController;
   private DashController dashController;
+  private GoalController goalController;
 
 }

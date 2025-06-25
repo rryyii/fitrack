@@ -47,11 +47,12 @@ public class LoginDAO {
    * @return ResultSet of the retrieved user
    */
   public ResultSet retrieveUser(int user_id) {
+    String sql = "SELECT * FROM users_ft WHERE user_id=?";
     PreparedStatement retrieve = null;
     ResultSet result = null;
     try {
-      String sql = "SELECT * FROM users_ft WHERE user_id=" + user_id;
       retrieve = connection.prepareStatement(sql);
+      retrieve.setInt(1, user_id);
       result = retrieve.executeQuery();
     } catch (SQLException sqe) {
       System.out.println("Couldn't retrieve user successfully:" + sqe.getMessage());

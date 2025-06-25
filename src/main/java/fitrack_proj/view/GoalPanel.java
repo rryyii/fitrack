@@ -1,14 +1,17 @@
 package fitrack_proj.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import fitrack_proj.controller.GoalController;
 import fitrack_proj.controller.PanelController;
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -23,11 +26,15 @@ public class GoalPanel extends JPanel {
     super(new MigLayout("wrap 1"));
     this.user = user;
     this.cards = cards;
-    
-    
+    this.goalController = controller.getGoalController();
+    this.goalController.setConnection(controller.getConnection());
+    this.goalController.setPanel(this);
+
     add(controller.getMainPanel(), "dock west");
     add(createGoalList());
-    add(createFitnessGoals());
+    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(cards);
+    frame.pack();
+
   }
 
   /**
@@ -39,52 +46,95 @@ public class GoalPanel extends JPanel {
     JPanel panel = new JPanel();
     panel.setLayout(new MigLayout("wrap 2"));
 
-    JLabel currentWeightLabel = new JLabel("Current Weight");
-    JLabel currentWeightField = new JLabel(String.valueOf(user.getWeight()));
-    // currentWeightField.addMouseListener(new GoalListener("currentWeight", connection, user));
-    panel.add(currentWeightLabel);
-    panel.add(currentWeightField);
 
     JLabel goalWeightLabel = new JLabel("Goal Weight");
-    JLabel goalWeightField = new JLabel(String.valueOf(user.getWeightGoal()));
-    // goalWeightField.addMouseListener(new GoalListener("goalWeight", connection, user));
+    JButton goalWeightField = new JButton(String.valueOf(user.getWeightGoal()));
+    goalWeightField.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String userInput = JOptionPane.showInputDialog(null, "New Goal Weight");
+        if (userInput != null) {
+          goalController.handleGoal(userInput, user);
+        }
+      }
+
+    });
+    goalWeightField.setBorderPainted(false);
     panel.add(goalWeightLabel);
     panel.add(goalWeightField);
 
-    JLabel currentActivityLabel = new JLabel("Activity Level");
-    JLabel currentActivityField = new JLabel(user.getActivityLevel());
-    // currentActivityField.addMouseListener(new GoalListener("activityLevel", connection, user));
-    panel.add(currentActivityLabel);
-    panel.add(currentActivityField);
-
-    return panel;
-  }
-
-  /**
-   * Creates a new panel for the user's fitness goals
-   * 
-   * @return JPanel panel with the added Swing components
-   */
-  public JPanel createFitnessGoals() {
-    JPanel panel = new JPanel();
-    panel.setLayout(new MigLayout("wrap 2"));
 
     JLabel workoutNumberLabel = new JLabel("Workouts per Week");
-    JLabel workoutNumberField = new JLabel(String.valueOf(user.getWorkoutPerWeek()));
-    // workoutNumberField.addMouseListener(new GoalListener("workoutsPerWeek", connection, user));
+    JButton workoutNumberField = new JButton(String.valueOf(user.getWorkoutPerWeek()));
+    workoutNumberField.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String userInput = JOptionPane.showInputDialog(null, "New Workout per Week Goal");
+        if (userInput != null) {
+          goalController.handleNumber(userInput, user);
+        }
+      }
+
+    });
+    workoutNumberField.setBorderPainted(false);
     panel.add(workoutNumberLabel);
     panel.add(workoutNumberField);
 
     JLabel workoutMinutesLabel = new JLabel("Minutes per Week");
-    JLabel workoutMinutesField = new JLabel(String.valueOf(user.getMinutesPerWeek()));
-    // workoutMinutesField.addMouseListener(new GoalListener("minutesPerWeek", connection, user));
+    JButton workoutMinutesField = new JButton(String.valueOf(user.getMinutesPerWeek()));
+    workoutMinutesField.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String userInput = JOptionPane.showInputDialog(null, "New Minutes per Week Goal");
+        if (userInput != null) {
+          goalController.handleMinutes(userInput, user);
+        }
+      }
+
+    });
+    workoutMinutesField.setBorderPainted(false);
     panel.add(workoutMinutesLabel);
     panel.add(workoutMinutesField);
+
+    this.workoutNumberField = workoutNumberField;
+    this.workoutMinutesField = workoutMinutesField;
+
+    this.goalWeightField = goalWeightField;
 
     return panel;
   }
 
+  public JButton getCurrentActivityField() {
+    return currentActivityField;
+  }
+
+  public JButton getCurrentWeightField() {
+    return currentWeightField;
+  }
+
+  public JButton getGoalWeightField() {
+    return goalWeightField;
+  }
+
+  public JButton getWorkoutNumberField() {
+    return workoutNumberField;
+  }
+
+  public JButton getWorkoutMinutesField() {
+    return workoutMinutesField;
+  }
+
+
   private User user;
   private FitrackDatabase connection;
   private JPanel cards;
+  private GoalController goalController;
+
+
+  private JButton currentActivityField;
+  private JButton currentWeightField;
+  private JButton goalWeightField;
+  private JButton workoutNumberField;
+  private JButton workoutMinutesField;
 }

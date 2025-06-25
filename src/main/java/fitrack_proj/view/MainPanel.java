@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.FlatClientProperties;
 import fitrack_proj.controller.PanelController;
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
@@ -32,23 +33,26 @@ public class MainPanel extends JPanel {
     panel.setLayout(new MigLayout("wrap 1"));
     panel.setBackground(new Color(0, 0, 0));
     JButton home = new JButton("Home");
+    home.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
     home.addActionListener(e -> {
       this.controller.showDashPanel();
     });
     panel.add(home);
     JButton profile = new JButton("Profile");
+    profile.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
     profile.addActionListener(e -> {
-      controller.createProfilelPanel(userInfo);
       controller.showProfilePanel();
     });
     panel.add(profile);
     JButton goals = new JButton("Goals");
+    goals.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
     goals.addActionListener(e -> {
-      controller.createGoalPanel(userInfo);
+      controller.createGoalController();
       controller.showGoalPanel();
     });
     panel.add(goals);
     JButton logout = new JButton("Logout");
+    logout.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
     logout.addActionListener(e -> {
     });
     panel.add(logout);

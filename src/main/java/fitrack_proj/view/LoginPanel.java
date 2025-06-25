@@ -1,6 +1,13 @@
 package fitrack_proj.view;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 
 public class LoginPanel extends JPanel {
@@ -23,8 +30,10 @@ public class LoginPanel extends JPanel {
     passField = new JPasswordField(15);
 
     loginButton = new JButton("Login");
+    loginButton.putClientProperty(FlatClientProperties.STYLE, "font:bold;");
 
     registerButton = new JButton("Register");
+    registerButton.putClientProperty(FlatClientProperties.STYLE, "font:bold;");
 
     userLabel = new JLabel("Username: ");
     passLabel = new JLabel("Password: ");

@@ -1,11 +1,14 @@
 package fitrack_proj.view;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import fitrack_proj.controller.DashController;
 import fitrack_proj.controller.PanelController;
@@ -34,23 +37,32 @@ public class DashPanel extends JPanel {
     this.connection = connection;
     this.panelController = panelController;
     userInfo = new User(user_id, loginModel);
-
+    
+    panelController.setUser(userInfo);
+    panelController.createMainPanel();
+    
+    add(panelController.getMainPanel(), "dock west");
+    add(createInfoPanel());
+    add(createExercisePanel());
+    add(createNutritionPanel());
+    dashController.setController(this, connection);
+    this.dashController = dashController;
+    
+    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(cards);
+    frame.pack();
+  }
+  
+  public JPanel createInfoPanel() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new MigLayout());
     status = new JTextArea();
     status.setEditable(false);
     String statusText =
         "Welcome back %s !\n Current Height: %d inches \n Current Weight: %d lbs \n";
     status.setText(String.format(statusText, userInfo.getUsername(), userInfo.getHeight(),
         userInfo.getWeight()));
-    add(status, "wrap");
-    
-    panelController.setUser(userInfo);
-    panelController.createMainPanel();
-    
-    add(panelController.getMainPanel(), "dock west");
-    add(createExercisePanel());
-    add(createNutritionPanel());
-    dashController.setController(this, connection);
-    this.dashController = dashController;
+    panel.add(status, "wrap");
+    return panel;
   }
 
   /**

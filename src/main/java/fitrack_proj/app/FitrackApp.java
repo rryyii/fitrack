@@ -1,6 +1,6 @@
 package fitrack_proj.app;
 
-import fitrack_proj.panel.FitrackFrame;
+import fitrack_proj.view.FitrackFrame;
 
 /**
  * FitrackApp main class to run the application.

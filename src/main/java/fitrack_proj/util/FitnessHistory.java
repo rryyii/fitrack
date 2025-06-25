@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
-import fitrack_proj.enums.ExerciseType;
-import fitrack_proj.enums.NutritionType;
+import fitrack_proj.model.enums.ExerciseType;
+import fitrack_proj.model.enums.NutritionType;
 
 /**
  * Routine Class.

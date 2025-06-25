@@ -13,9 +13,10 @@ import fitrack_proj.view.RegisterPanel;
 
 public class PanelController {
 
-  public PanelController(JPanel cards, CardLayout layout) {
+  public PanelController(JPanel cards, CardLayout layout,FitrackDatabase connection) {
     this.cards = cards;
     this.layout = layout;
+    this.connection = connection;
   }
 
   public MainPanel getMainPanel() {
@@ -54,12 +55,14 @@ public class PanelController {
     this.dashPanel = new DashPanel(cards, connection, loginModel, user_id, this, dashController);
     this.loginDAO = loginModel;
     this.dashController = dashController;
+    this.connection = connection;
     this.cards.add(dashPanel, "DASHPANEL");
   }
   
   public void showGoalPanel() {
     if (goalPanel == null) {
-      System.out.println("No currently initialized GoalPanel.");
+      createGoalPanel(this.user);
+      layout.show(cards, "GOALPANEL");
     } else {
       layout.show(cards, "GOALPANEL");
     }
@@ -72,13 +75,14 @@ public class PanelController {
   
   public void showProfilePanel() {
     if (profilePanel == null) {
-      System.out.println("No currently initialized ProfilePanel.");
+      createProfilePanel(this.user);
+      layout.show(cards, "PROFILEPANEL");
     } else {
       layout.show(cards, "PROFILEPANEL");
     }
   }
   
-  public void createProfilelPanel(User user) {
+  public void createProfilePanel(User user) {
     this.profilePanel = new ProfilePanel(user, cards, this);
     this.cards.add(profilePanel, "PROFILEPANEL");
   }
@@ -95,9 +99,30 @@ public class PanelController {
   public DashController getDashController() {
     return this.dashController;
   }
+  
+  public void setGoalController(GoalController controller) { 
+    this.goalController = controller;
+  }
+  
+  public void createGoalController() {
+    this.goalController = new GoalController();
+  }
+  
+  public GoalController getGoalController() {
+    return this.goalController;
+  }
+  
+  public User getUser() {
+    return this.user;
+  }
+  public FitrackDatabase getConnection() {
+    return this.connection;
+  }
 
+  private FitrackDatabase connection;
   private LoginDAO loginDAO;
   private DashController dashController;
+  private GoalController goalController;
   private User user;
   private JPanel cards;
   private CardLayout layout;
