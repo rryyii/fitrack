@@ -3,6 +3,7 @@ package fitrack_proj.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import fitrack_proj.model.dao.LoginDAO;
+import fitrack_proj.util.FitnessHistory;
 
 public class User {
   public User(int userId, LoginDAO connection) {
@@ -72,6 +73,10 @@ public class User {
 
   public int getMinutesPerWeek() {
     return minutesPerWeek;
+  }
+  
+  public int calculateCalories() {
+	  return FitnessHistory.calculateCal(weight, height, gender, activityLevel, age);
   }
 
   private LoginDAO connection;

@@ -25,7 +25,7 @@ public class ProfilePanel extends JPanel {
 	 * ProfilePanel main constructor
 	 */
 	public ProfilePanel(User userInfo, JPanel cards, PanelController controller) {
-		super(new MigLayout("wrap 1"));
+		super(new MigLayout("wrap 1, insets 20"));
 		this.user = userInfo;
 		;
 		this.profileController = controller.getProfileController();
@@ -61,20 +61,20 @@ public class ProfilePanel extends JPanel {
 		});
 		usernameField.setBorderPainted(false);
 		panel.add(usernameLabel);
-		panel.add(usernameField);
+		panel.add(usernameField, "gapbottom 20");
 
 		JLabel genderLabel = new JLabel("Gender: ");
 		JButton genderField = new JButton(user.getGender());
 		genderField.setBorderPainted(false);
 		panel.add(genderLabel);
-		panel.add(genderField);
+		panel.add(genderField, "gapbottom 20");
 		;
 
 		JLabel heightLabel = new JLabel("Height: ");
 		JButton heightField = new JButton(String.valueOf(user.getHeight()));
 		heightField.setBorderPainted(false);
 		panel.add(heightLabel);
-		panel.add(heightField);
+		panel.add(heightField, "gapbottom 20");
 
 		JLabel weightLabel = new JLabel("Weight: ");
 		JButton weightField = new JButton(String.valueOf(user.getWeight()));
@@ -91,7 +91,7 @@ public class ProfilePanel extends JPanel {
 		});
 		weightField.setBorderPainted(false);
 		panel.add(weightLabel);
-		panel.add(weightField);
+		panel.add(weightField, "gapbottom 20");
 
 		JLabel activityLabel = new JLabel("Activity Level: ");
 		JButton activityField = new JButton(String.valueOf(user.getActivityLevel()));
@@ -115,7 +115,7 @@ public class ProfilePanel extends JPanel {
 		});
 		activityField.setBorderPainted(false);
 		panel.add(activityLabel);
-		panel.add(activityField);
+		panel.add(activityField, "gapbottom 20");
 
 		this.activityField = activityField;
 		this.weightField = weightField;

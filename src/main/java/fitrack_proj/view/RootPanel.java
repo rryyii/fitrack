@@ -11,7 +11,7 @@ public class RootPanel extends JPanel {
     }
 
     public void setNavPanel(NavigationPanel panel) {
-        this.add(panel);
+        this.add(panel, "growx");
     }
 
     public void setMainPanel(JPanel cards) {

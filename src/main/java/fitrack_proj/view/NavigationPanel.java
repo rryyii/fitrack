@@ -23,13 +23,22 @@ public class NavigationPanel extends JPanel {
 			this.controller.showDashPanel();
 		});
 		this.add(home);
-		JButton profile = new JButton("Profile");
-		profile.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
-		profile.addActionListener(e -> {
-			controller.createProfileController();
-			controller.showProfilePanel();
+		JButton nutrition = new JButton("Nutrition");
+		nutrition.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
+		nutrition.addActionListener(e -> {
+			controller.createNutritionPanel();
+			controller.createNutritionController(user);
+			controller.showNutritionPanel();
 		});
-		this.add(profile);
+		this.add(nutrition);
+		JButton exercise = new JButton("Exercise");
+		exercise.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
+		exercise.addActionListener(e -> {
+			controller.createExercisePanel();
+			controller.createExerciseController();
+			controller.showExercisePanel();
+		});
+		this.add(exercise);
 		JButton goals = new JButton("Goals");
 		goals.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
 		goals.addActionListener(e -> {
@@ -37,11 +46,14 @@ public class NavigationPanel extends JPanel {
 			controller.showGoalPanel();
 		});
 		this.add(goals);
-		JButton logout = new JButton("Logout");
-		logout.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
-		logout.addActionListener(e -> {
+		JButton profile = new JButton("Profile");
+		profile.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
+		profile.addActionListener(e -> {
+			controller.createProfileController();
+			controller.showProfilePanel();
 		});
-		this.add(logout);
+		this.add(profile);
+
 	}
 
 	private PanelController controller;

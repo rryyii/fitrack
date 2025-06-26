@@ -9,6 +9,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -41,37 +43,44 @@ public class RegisterPanel extends JPanel {
 	 */
 	private JPanel createRegisterComponents() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("wrap 1"));
-		usernameLabel = new JLabel("Enter a username: ");
+		panel.setLayout(new MigLayout("wrap 1, insets 20"));
+		JLabel registerLabel = new JLabel("Sign up to Fitrack");
+		panel.add(registerLabel);
+		usernameLabel = new JLabel("Username");
 		panel.add(usernameLabel);
 		usernameField = new JTextField(15);
+		usernameField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(usernameField, "wrap");
 
-		passwordLabel = new JLabel("Enter a password: ");
+		passwordLabel = new JLabel("Password: ");
 		panel.add(passwordLabel);
 		passwordField = new JPasswordField(15);
+		passwordField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(passwordField, "wrap");
 
-		genderLabel = new JLabel("Enter your sex: ");
+		genderLabel = new JLabel("Sex: ");
 		panel.add(genderLabel);
 
 		genderField = new JComboBox<>();
 		genderField.addItem("");
 		genderField.addItem("Male");
 		genderField.addItem("Female");
+		genderField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(genderField, "wrap");
 
-		weightLabel = new JLabel("Enter your weight: ");
+		weightLabel = new JLabel("Weight: ");
 		panel.add(weightLabel);
 		weightField = new JTextField(3);
+		weightField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(weightField, "wrap");
 
-		heightLabel = new JLabel("Enter your height: ");
+		heightLabel = new JLabel("Height: ");
 		panel.add(heightLabel);
 		heightField = new JTextField(10);
+		heightField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(heightField, "wrap");
 
-		activityLabel = new JLabel("Enter your current activity level: ");
+		activityLabel = new JLabel("Activity level: ");
 		panel.add(activityLabel);
 
 		activityField = new JComboBox<>();
@@ -80,11 +89,13 @@ public class RegisterPanel extends JPanel {
 		activityField.addItem("Moderate exercise");
 		activityField.addItem("Active");
 		activityField.addItem("Very Active");
+		activityField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(activityField, "wrap");
 
-		ageLabel = new JLabel("Enter your age: ");
+		ageLabel = new JLabel("Age: ");
 		panel.add(ageLabel);
 		ageField = new JTextField(3);
+		ageField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 		panel.add(ageField, "wrap");
 
 		submitButton = new JButton("Submit");
