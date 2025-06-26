@@ -11,14 +11,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import org.knowm.xchart.PieChart;
+
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
 import fitrack_proj.model.dao.ExerciseDAO;
+import fitrack_proj.view.DashPanel;
 import fitrack_proj.view.ExercisePanel;
 
 public class ExerciseController {
-	public ExerciseController(ExercisePanel panel, FitrackDatabase connection, User user) {
+	public ExerciseController(ExercisePanel panel, FitrackDatabase connection, User user, DashPanel dashPanel) {
 		this.panel = panel;
+		this.exerciseChart = dashPanel.getExerciseChart();
 		this.exerciseModel = new ExerciseDAO(connection.getConnection());
 		this.exerciseButton = panel.getExerciseButton();
 		this.userInfo = user;
@@ -42,6 +46,7 @@ public class ExerciseController {
 					@Override
 					public void run() {
 						updateHistory();
+						exerciseChart.updatePieSeries(selected, elapsed);
 					}
 				});
 			} else {
@@ -76,6 +81,7 @@ public class ExerciseController {
 	}
 
 	private User userInfo;
+	private PieChart exerciseChart;
 	private ExercisePanel panel;
 	private ExerciseDAO exerciseModel;
 	private JComboBox<String> exerciseBox;

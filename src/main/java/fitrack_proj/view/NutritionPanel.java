@@ -33,9 +33,8 @@ public class NutritionPanel extends JPanel {
    *
    * @param cards CardLayout to use for return button
    */
-  public NutritionPanel(User user, JPanel cards) {
+  public NutritionPanel(User user) {
     super(new MigLayout("", "center", "top"));
-    this.cards = cards;
     this.userInfo = user;
     add(createNutritionPanel());
     add(createTable());
@@ -55,7 +54,7 @@ public class NutritionPanel extends JPanel {
    */
   private JPanel createNutritionPanel() {
     JPanel panel = new JPanel();
-    panel.setLayout(new MigLayout());
+    panel.setLayout(new MigLayout("insets 20"));
     panel.setBackground(new Color(25, 5, 22));
     panel.putClientProperty(FlatClientProperties.STYLE, "arc:8");
 
@@ -115,21 +114,21 @@ public class NutritionPanel extends JPanel {
 
   private JPanel createTable() {
     JPanel panel = new JPanel();
-    panel.setLayout(new MigLayout());
+    panel.setLayout(new MigLayout("insets 20"));
     panel.setBackground(new Color(25, 5, 22));
     panel.putClientProperty(FlatClientProperties.STYLE, "arc:8");
     foodHistoryLabel = new JLabel("History");
     foodHistoryLabel.putClientProperty("FlatLaf.styleClass", "h1");
     panel.add(foodHistoryLabel, "wrap");
     String foodColumn[] =
-        {"Food", "Servings", "Calories", "Protein", "Carbs", "Fats", "Meal Type", "Date"};
+        {"Food", "Servings", "Calories", "Protein", "Carbs", "Fats", "Type", "Date"};
     DefaultTableModel nutritionTable = new DefaultTableModel(foodColumn, 0);
     foodTable = new JTable(nutritionTable);
     foodTable.setFocusable(false);
     foodTable.setVisible(true);
 
     JScrollPane scroll = new JScrollPane(foodTable);
-    scroll.setPreferredSize(new Dimension(350, 210));
+    scroll.setPreferredSize(new Dimension(450, 210));
     panel.add(scroll, "wrap");
 
 
@@ -237,6 +236,5 @@ public class NutritionPanel extends JPanel {
   private JLabel foodHistoryLabel;
   private JLabel servingLabel;
   private JTable foodTable;
-  private JPanel cards;
   private static final long serialVersionUID = 2223906239612989135L;
 }

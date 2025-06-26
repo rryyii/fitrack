@@ -1,5 +1,6 @@
 package fitrack_proj.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -8,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import fitrack_proj.controller.GoalController;
 import fitrack_proj.controller.PanelController;
 import fitrack_proj.model.FitrackDatabase;
@@ -48,8 +52,9 @@ public class GoalPanel extends JPanel {
 	 */
 	private JPanel createGoalList() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("wrap 2"));
-
+		panel.setLayout(new MigLayout("wrap 2, insets 20"));
+		panel.setBackground(new Color(25, 5, 22));
+		panel.putClientProperty(FlatClientProperties.STYLE, "arc:8");
 		JLabel goalWeightLabel = new JLabel("Goal Weight");
 		JButton goalWeightField = new JButton(String.valueOf(user.getWeightGoal()));
 		goalWeightField.addActionListener(new ActionListener() {

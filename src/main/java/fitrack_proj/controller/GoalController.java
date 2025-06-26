@@ -1,6 +1,5 @@
 package fitrack_proj.controller;
 
-import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
 import fitrack_proj.model.FitrackDatabase;

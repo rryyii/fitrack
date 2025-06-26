@@ -3,7 +3,7 @@ package fitrack_proj.controller;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.dao.LoginDAO;
 import fitrack_proj.view.LoginPanel;

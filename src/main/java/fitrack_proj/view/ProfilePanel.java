@@ -1,5 +1,6 @@
 package fitrack_proj.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import fitrack_proj.controller.PanelController;
 import fitrack_proj.controller.ProfileController;
 import fitrack_proj.model.User;
@@ -46,7 +50,9 @@ public class ProfilePanel extends JPanel {
 
 	private JPanel createProfile() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("wrap 2"));
+		panel.setLayout(new MigLayout("wrap 2, insets 20"));
+	    panel.setBackground(new Color(25, 5, 22));
+	    panel.putClientProperty(FlatClientProperties.STYLE, "arc:8");
 		BufferedImage img = null;
 		try {
 		  img = ImageIO.read(new File("test.jpg"));

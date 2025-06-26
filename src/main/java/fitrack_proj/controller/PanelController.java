@@ -1,9 +1,10 @@
 package fitrack_proj.controller;
 
 import java.awt.CardLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
 import fitrack_proj.model.dao.LoginDAO;
@@ -115,7 +116,7 @@ public class PanelController {
 
   public void createNutritionPanel() {
     if (this.nutritionPanel == null) {
-      this.nutritionPanel = new NutritionPanel(user, cards);
+      this.nutritionPanel = new NutritionPanel(user);
       this.cards.add(nutritionPanel, "NUTRITIONPANEL");
     }
   }
@@ -194,13 +195,13 @@ public class PanelController {
 
   public void createExerciseController() {
     if (exerciseController == null) {
-      exerciseController = new ExerciseController(exercisePanel, connection, user);
+      exerciseController = new ExerciseController(exercisePanel, connection, user, dashPanel);
     }
   }
 
   public void createNutritionController(User user) {
     if (nutritionController == null) {
-      nutritionController = new NutritionController(nutritionPanel, connection, user);
+      nutritionController = new NutritionController(nutritionPanel, connection, user, dashPanel);
     }
   }
 

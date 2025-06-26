@@ -50,7 +50,7 @@ public class ExercisePanel extends JPanel {
    */
   private JPanel createExercisePanel() {
     JPanel panel = new JPanel();
-    panel.setLayout(new MigLayout("wrap 1"));
+    panel.setLayout(new MigLayout("wrap 1, insets 20"));
     panel.putClientProperty(FlatClientProperties.STYLE, "arc:8");
     panel.setBackground(new Color(25, 5, 22));
 
@@ -82,7 +82,7 @@ public class ExercisePanel extends JPanel {
 
   private JPanel createTable() {
     JPanel panel = new JPanel();
-    panel.setLayout(new MigLayout("wrap"));
+    panel.setLayout(new MigLayout("wrap, insets 20"));
     exerciseHistoryLabel = new JLabel("Exercise History:");
     exerciseHistoryLabel.putClientProperty("FlatLaf.styleClass", "h1");
 

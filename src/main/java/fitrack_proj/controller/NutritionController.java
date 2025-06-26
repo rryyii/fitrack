@@ -12,14 +12,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import org.knowm.xchart.PieChart;
+
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
 import fitrack_proj.model.dao.NutritionDAO;
+import fitrack_proj.view.DashPanel;
 import fitrack_proj.view.NutritionPanel;
 
 public class NutritionController {
-  public NutritionController(NutritionPanel panel, FitrackDatabase connection, User user) {
+  public NutritionController(NutritionPanel panel, FitrackDatabase connection, User user, DashPanel dashPanel) {
     this.userInfo = user;
+    this.nutritionChart = dashPanel.getNutritionChart();
     this.panel = panel;
     this.nutritionModel = new NutritionDAO(connection.getConnection());
     this.carbField = panel.getCarbField();
@@ -60,6 +64,9 @@ public class NutritionController {
             proteinBar.setValue(proteinBar.getValue() + protein);
             fatBar.setValue(fatBar.getValue() + fats);
             carbBar.setValue(carbBar.getValue() + carbs);
+            nutritionChart.updatePieSeries("Protein", protein);
+            nutritionChart.updatePieSeries("Carbs", carbs);
+            nutritionChart.updatePieSeries("Fats", fats);
           }
         });
       } else {
@@ -110,5 +117,6 @@ public class NutritionController {
   private JTextField carbField;
   private JTextField fatField;
   private JComboBox<String> typeField;
+  private PieChart nutritionChart;
   private JButton foodButton;
 }
