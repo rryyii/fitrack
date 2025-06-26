@@ -1,5 +1,6 @@
 package fitrack_proj.view;
 
+import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,40 +24,45 @@ public class LoginPanel extends JPanel {
   public LoginPanel(JPanel cards) {
     super(new MigLayout("wrap 1, align center, insets 20"));
     add(createUserInfoPanel());
-	SwingUtilities.invokeLater(() -> {
-		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-		if (frame != null) {
-			frame.pack();
-		}
-	});
+    SwingUtilities.invokeLater(() -> {
+      JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+      if (frame != null) {
+        frame.pack();
+      }
+    });
   }
 
   private JPanel createUserInfoPanel() {
     JPanel panel = new JPanel();
-    
+    panel.setLayout(new MigLayout("wrap 1", "align center"));
+    panel.setBackground(new Color(25, 5, 22));
+    panel.putClientProperty(FlatClientProperties.STYLE, "arc:8");
     JLabel welcomeLabel = new JLabel("Welcome to Fitrack");
-    
+    welcomeLabel.putClientProperty("FlatLaf.styleClass", "h1");
+
     loginField = new JTextField(15);
     loginField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
     passField = new JPasswordField(15);
     passField.putClientProperty(FlatClientProperties.STYLE, "arc: 8");
 
     loginButton = new JButton("Login");
-    loginButton.putClientProperty(FlatClientProperties.STYLE, "font:bold;");
+    loginButton.putClientProperty("JButton.buttonType", "borderless");
+    loginButton.putClientProperty(FlatClientProperties.STYLE, "font:bold; background: #8343bc");
 
     registerButton = new JButton("Register");
-    registerButton.putClientProperty(FlatClientProperties.STYLE, "font:bold;");
+    registerButton.putClientProperty("JButton.buttonType", "borderless");   
+    registerButton.putClientProperty(FlatClientProperties.STYLE, "font:bold; background: #8343bc");
 
     userLabel = new JLabel("Username: ");
     passLabel = new JLabel("Password: ");
 
-    this.add(welcomeLabel, "gapbottom 30");
-    this.add(userLabel);
-    this.add(loginField);
-    this.add(passLabel);
-    this.add(passField);
-    this.add(loginButton, "align center");
-    this.add(registerButton, "align center");
+    panel.add(welcomeLabel, "gapbottom 30");
+    panel.add(userLabel);
+    panel.add(loginField);
+    panel.add(passLabel);
+    panel.add(passField, "gapbottom 30");
+    panel.add(loginButton, "align center");
+    panel.add(registerButton, "align center");
     return panel;
   }
 

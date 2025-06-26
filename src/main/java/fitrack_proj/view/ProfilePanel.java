@@ -2,7 +2,10 @@ package fitrack_proj.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -10,7 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import fitrack_proj.controller.PanelController;
 import fitrack_proj.controller.ProfileController;
 import fitrack_proj.model.User;
@@ -45,7 +47,12 @@ public class ProfilePanel extends JPanel {
 	private JPanel createProfile() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new MigLayout("wrap 2"));
-
+		BufferedImage img = null;
+		try {
+		  img = ImageIO.read(new File("test.jpg"));
+		} catch (IOException e) {
+		  
+		}
 		JLabel usernameLabel = new JLabel("Username: ");
 		JButton usernameField = new JButton(user.getUsername());
 		usernameField.addActionListener(new ActionListener() {

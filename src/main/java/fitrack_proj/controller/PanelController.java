@@ -1,9 +1,9 @@
 package fitrack_proj.controller;
 
 import java.awt.CardLayout;
-
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import javax.swing.SwingUtilities;
 import fitrack_proj.model.FitrackDatabase;
 import fitrack_proj.model.User;
 import fitrack_proj.model.dao.LoginDAO;
@@ -18,178 +18,210 @@ import fitrack_proj.view.RootPanel;
 
 public class PanelController {
 
-	public PanelController(JPanel cards, CardLayout layout, FitrackDatabase connection) {
-		this.cards = cards;
-		this.layout = layout;
-		this.connection = connection;
-	}
+  public PanelController(JPanel cards, CardLayout layout, FitrackDatabase connection,
+      JFrame frame) {
+    this.cards = cards;
+    this.layout = layout;
+    this.connection = connection;
+    this.frame = frame;
+  }
 
-	public void createRootPanel() {
-		this.rootPanel = new RootPanel();
-		this.rootPanel.setMainPanel(this.cards);
-	}
+  public void createRootPanel() {
+    this.rootPanel = new RootPanel();
+    this.rootPanel.setMainPanel(this.cards);
+  }
 
-	public void setRootPanel() {
-		this.rootPanel.setNavPanel(navigationPanel);
-	}
+  public void setRootPanel() {
+    this.rootPanel.setNavPanel(navigationPanel);
+  }
 
-	public RootPanel getRootPanel() {
-		return this.rootPanel;
-	}
+  public RootPanel getRootPanel() {
+    return this.rootPanel;
+  }
 
-	public NavigationPanel getNavigationPanel() {
-		return this.navigationPanel;
-	}
+  public NavigationPanel getNavigationPanel() {
+    return this.navigationPanel;
+  }
 
-	public void createNavigationPanel() {
-		this.navigationPanel = new NavigationPanel(this.cards, this, user);
-	}
+  public void createNavigationPanel() {
+    this.navigationPanel = new NavigationPanel(this.cards, this, user);
+  }
 
-	public void showRegisterPanel() {
-		if (registerPanel == null) {
-			createRegisterPanel();
-		} else {
-			layout.show(cards, "REGISTERPANEL");
-		}
-	}
+  public void showRegisterPanel() {
+    if (registerPanel == null) {
+      createRegisterPanel();
+    } else {
+      layout.show(cards, "REGISTERPANEL");
+    }
+  }
 
-	public RegisterPanel createRegisterPanel() {
-		this.registerPanel = new RegisterPanel(cards);
-		this.cards.add(registerPanel, "REGISTERPANEL");
-		return this.registerPanel;
-	}
+  public RegisterPanel createRegisterPanel() {
+    this.registerPanel = new RegisterPanel(cards);
+    this.cards.add(registerPanel, "REGISTERPANEL");
+    return this.registerPanel;
+  }
 
-	public void showDashPanel() {
-		if (dashPanel == null) {
-			System.out.println("No currently initialized DashPanel.");
-		} else {
-			layout.show(cards, "DASHPANEL");
-		}
-	}
+  public void showDashPanel() {
+    if (dashPanel == null) {
+      System.out.println("No currently initialized DashPanel.");
+    } else {
+      layout.show(cards, "DASHPANEL");
 
-	public void createDashPanel(int user_id, FitrackDatabase connection, LoginDAO loginModel,
-			DashController dashController) {
-		this.dashPanel = new DashPanel(cards, connection, loginModel, user_id, this, dashController);
-		this.loginDAO = loginModel;
-		this.dashController = dashController;
-		this.connection = connection;
-		this.cards.add(dashPanel, "DASHPANEL");
-	}
+    }
+  }
 
-	public void showGoalPanel() {
-		if (goalPanel == null) {
-			createGoalPanel(this.user);
-			layout.show(cards, "GOALPANEL");
-		} else {
-			layout.show(cards, "GOALPANEL");
-		}
-	}
+  public void createDashPanel(int user_id, FitrackDatabase connection, LoginDAO loginModel,
+      DashController dashController) {
+    if (dashPanel == null) {
+      this.dashPanel = new DashPanel(cards, connection, loginModel, user_id, this, dashController);
+      this.loginDAO = loginModel;
+      this.dashController = dashController;
+      this.connection = connection;
+      this.cards.add(dashPanel, "DASHPANEL");
+    }
+  }
 
-	public void createGoalPanel(User user) {
-		this.goalPanel = new GoalPanel(user, cards, this);
-		this.cards.add(goalPanel, "GOALPANEL");
-	}
+  public void showGoalPanel() {
+    if (goalPanel == null) {
+      createGoalPanel(this.user);
+      layout.show(cards, "GOALPANEL");
+    } else {
+      layout.show(cards, "GOALPANEL");
+    }
+  }
 
-	public void showProfilePanel() {
-		if (profilePanel == null) {
-			createProfilePanel(this.user);
-			layout.show(cards, "PROFILEPANEL");
-		} else {
-			layout.show(cards, "PROFILEPANEL");
-		}
-	}
+  public void createGoalPanel(User user) {
+    if (goalPanel == null) {
+      this.goalPanel = new GoalPanel(user, cards, this);
+      this.cards.add(goalPanel, "GOALPANEL");
+    }
+  }
 
-	public void createProfilePanel(User user) {
-		this.profilePanel = new ProfilePanel(user, cards, this);
-		this.cards.add(profilePanel, "PROFILEPANEL");
-	}
+  public void showProfilePanel() {
+    if (profilePanel == null) {
+      createProfilePanel(this.user);
+      layout.show(cards, "PROFILEPANEL");
+    } else {
+      layout.show(cards, "PROFILEPANEL");
+    }
+  }
 
-	public void createNutritionPanel() {
-		if (this.nutritionPanel == null) {
-			this.nutritionPanel = new NutritionPanel(user, cards);
-			this.cards.add(nutritionPanel, "NUTRITIONPANEL");
-		}
-	}
+  public void createProfilePanel(User user) {
+    if (this.profilePanel == null) {
+      this.profilePanel = new ProfilePanel(user, cards, this);
+      this.cards.add(profilePanel, "PROFILEPANEL");
+    }
+  }
 
-	public void createExercisePanel() {
-		if (this.exercisePanel == null) {
-			this.exercisePanel = new ExercisePanel(cards);
-			this.cards.add(exercisePanel, "EXERCISEPANEL");
-		}
-	}
+  public void createNutritionPanel() {
+    if (this.nutritionPanel == null) {
+      this.nutritionPanel = new NutritionPanel(user, cards);
+      this.cards.add(nutritionPanel, "NUTRITIONPANEL");
+    }
+  }
 
-	public void showExercisePanel() {
-		layout.show(cards, "EXERCISEPANEL");
-	}
+  public void createExercisePanel() {
+    if (this.exercisePanel == null) {
+      this.exercisePanel = new ExercisePanel(cards);
+      this.cards.add(exercisePanel, "EXERCISEPANEL");
+    }
+  }
 
-	public void showNutritionPanel() {
-		layout.show(cards, "NUTRITIONPANEL");
-	}
+  public void showExercisePanel() {
+    if (exercisePanel != null) {
+      layout.show(cards, "EXERCISEPANEL");
+    }
+  }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+  public void showNutritionPanel() {
+    if (nutritionPanel != null) {
+      layout.show(cards, "NUTRITIONPANEL");
+    }
+  }
+  
+  public NutritionPanel getNutritionPanel() {
+    if (nutritionPanel != null) {
+      return this.nutritionPanel;
+    } else {
+       return null;
+    }
+  }
 
-	public LoginDAO getLoginDAO() {
-		return this.loginDAO;
-	}
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-	public DashController getDashController() {
-		return this.dashController;
-	}
+  public LoginDAO getLoginDAO() {
+    return this.loginDAO;
+  }
 
-	public void setGoalController(GoalController controller) {
-		this.goalController = controller;
-	}
+  public DashController getDashController() {
+    return this.dashController;
+  }
 
-	public void createGoalController() {
-		this.goalController = new GoalController();
-	}
+  public void setGoalController(GoalController controller) {
+    this.goalController = controller;
+  }
 
-	public GoalController getGoalController() {
-		return this.goalController;
-	}
+  public void createGoalController() {
+    if (goalController == null) {
+      this.goalController = new GoalController();
+    }
+  }
 
-	public User getUser() {
-		return this.user;
-	}
+  public GoalController getGoalController() {
+    return this.goalController;
+  }
 
-	public FitrackDatabase getConnection() {
-		return this.connection;
-	}
+  public User getUser() {
+    return this.user;
+  }
 
-	public void createProfileController() {
-		this.profileController = new ProfileController();
-		this.profileController.setDashPanel(dashPanel);
-	}
+  public FitrackDatabase getConnection() {
+    return this.connection;
+  }
 
-	public ProfileController getProfileController() {
-		return this.profileController;
-	}
+  public void createProfileController() {
+    if (profileController == null) {
+      this.profileController = new ProfileController();
+      this.profileController.setDashPanel(dashPanel);
+    }
+  }
 
-	public void createExerciseController() {
-		new ExerciseController(exercisePanel, connection, user);
-	}
+  public ProfileController getProfileController() {
+    return this.profileController;
+  }
 
-	public void createNutritionController(User user) {
-		new NutritionController(nutritionPanel, connection, user);
-	}
+  public void createExerciseController() {
+    if (exerciseController == null) {
+      exerciseController = new ExerciseController(exercisePanel, connection, user);
+    }
+  }
 
-	private NutritionPanel nutritionPanel;
-	private ExercisePanel exercisePanel;
-	private RootPanel rootPanel;
-	private FitrackDatabase connection;
-	private LoginDAO loginDAO;
-	private DashController dashController;
-	private GoalController goalController;
-	private ProfileController profileController;
-	private User user;
-	private JPanel cards;
-	private CardLayout layout;
-	private ProfilePanel profilePanel;
-	private RegisterPanel registerPanel;
-	private NavigationPanel navigationPanel;
-	private DashPanel dashPanel;
-	private GoalPanel goalPanel;
+  public void createNutritionController(User user) {
+    if (nutritionController == null) {
+      nutritionController = new NutritionController(nutritionPanel, connection, user);
+    }
+  }
+
+  private NutritionController nutritionController;
+  private ExerciseController exerciseController;
+  private NutritionPanel nutritionPanel;
+  private ExercisePanel exercisePanel;
+  private RootPanel rootPanel;
+  private JFrame frame;
+  private FitrackDatabase connection;
+  private LoginDAO loginDAO;
+  private DashController dashController;
+  private GoalController goalController;
+  private ProfileController profileController;
+  private User user;
+  private JPanel cards;
+  private CardLayout layout;
+  private ProfilePanel profilePanel;
+  private RegisterPanel registerPanel;
+  private NavigationPanel navigationPanel;
+  private DashPanel dashPanel;
+  private GoalPanel goalPanel;
 
 }

@@ -1,5 +1,6 @@
 package fitrack_proj.view;
 
+import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
