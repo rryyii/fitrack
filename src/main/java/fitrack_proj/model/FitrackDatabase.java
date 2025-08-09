@@ -24,7 +24,7 @@ public class FitrackDatabase {
       String url = System.getenv("DB_URL");
       String username = System.getenv("DB_USER");
       String password = System.getenv("DB_PASSWORD");
-      currentConnection = H2DatabaseUtil.getConnection();
+      currentConnection = DriverManager.getConnection(url, username, password);
       H2DatabaseUtil.initializeDatabase();
     } catch (SQLException e) {
       System.out.println("Couldn't establish a currentConnection successfully: " + e.getMessage());

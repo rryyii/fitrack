@@ -1,4 +1,4 @@
-package fitrack_proj.app;
+package fitrack_proj;
 
 import fitrack_proj.view.FitrackFrame;
 

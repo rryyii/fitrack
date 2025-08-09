@@ -90,7 +90,7 @@ public class DashPanel extends JPanel {
 		panel.putClientProperty(FlatClientProperties.STYLE, "arc: 8;");
 		PieChart chart = new PieChartBuilder().width(200).height(200).build();
 		for (String serie : series) {
-			chart.addSeries(serie, 25);
+			chart.addSeries(serie, 0);
 		}
 		chart.getStyler().setToolTipsEnabled(true);
 		chart.getStyler().setToolTipBorderColor(null);

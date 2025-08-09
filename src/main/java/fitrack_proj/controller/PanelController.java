@@ -204,7 +204,16 @@ public class PanelController {
       nutritionController = new NutritionController(nutritionPanel, connection, user, dashPanel);
     }
   }
+  
+  public void setRegisterController(RegisterController controller) {
+    this.registerController = controller;
+  }
+  
+  public RegisterController getRegisterController() {
+    return this.registerController;
+  }
 
+private RegisterController registerController;
   private NutritionController nutritionController;
   private ExerciseController exerciseController;
   private NutritionPanel nutritionPanel;

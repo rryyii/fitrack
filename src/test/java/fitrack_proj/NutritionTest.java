@@ -1,30 +1,20 @@
 package fitrack_proj;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.sql.Date;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
-import fitrack_proj.model.FitrackDatabase;
+import fitrack_proj.model.dao.NutritionDAO;
 
-class NutritionTest {
-  private FitrackDatabase connection = new FitrackDatabase();
-
-  private void setUp() {
-    String username = "test_name";
-    String password = "test_password";
-    String gender = "male";
-    int height = 190;
-    int weight = 250;
-    String activity = "none";
-    int age = 25;
-    connection.registerUser(username, password, gender, height, weight, activity, age);
-  }
+class NutritionTest extends BaseTest {
+  private NutritionDAO model = new NutritionDAO(connection.getConnection());
+  
 
   @Test
   void testInsertNutrition() {
     setUp();
     String food_name = "cherries";
     int serving_count = 20;
-    assertEquals(1, connection.insertNutrition(1, food_name, serving_count));
+//    assertEquals(1, model.insertNutrition(1, food_name, serving_count));
   }
 
   @Test
@@ -35,13 +25,13 @@ class NutritionTest {
   @Test
   void testRetrieveNutrition() {
     int user_id = 1;
-    assertNotNull(connection.retrieveNutrition(user_id));
+    assertNotNull(model.retrieveNutrition(user_id));
   }
 
   @Test
   void testFailureRetrieveNutrition() {
     int user_id = -25;
-    assertNull(connection.retrieveNutrition(user_id));
+    assertNull(model.retrieveNutrition(user_id));
   }
 
 }

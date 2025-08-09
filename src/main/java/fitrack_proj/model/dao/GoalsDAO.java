@@ -25,21 +25,23 @@ public class GoalsDAO {
   }
 
   public int setUserGoals(int userid, String field, int number, String value) {
-    String goals = "UPDATE goal_history SET " + field + "=? WHERE user_id=?;";
+    String goals = "INSERT INTO goal_history (user_id, " + field + ") VALUES (?, ?) "
+        + "ON DUPLICATE KEY UPDATE " + field + " = VALUES(" + field + ")";
     try { 
-      PreparedStatement update = connection.prepareStatement(goals);
-      if (value != null) {
-        update.setString(1, value);
-      } else {
-        update.setInt(1, number);
-      }
-      update.setInt(2, userid);
-      return update.executeUpdate();
+        PreparedStatement update = connection.prepareStatement(goals);
+        update.setInt(1, userid);
+        if (value != null) {
+            update.setString(2, value);
+        } else {
+            update.setInt(2, number);
+        }
+        return update.executeUpdate();
     } catch (SQLException sqe) {
-      System.out.println("Couldn't update user's goal: " + sqe);
+        System.out.println("Couldn't update user's goal: " + sqe);
     }
     return -1;
-  }
+}
+
 
   private Connection connection;
 

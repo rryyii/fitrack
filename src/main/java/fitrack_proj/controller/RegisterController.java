@@ -16,11 +16,11 @@ public class RegisterController {
     this.panelController = panelController;
     this.loginPanel = loginPanel;
     this.model = new RegisterDAO(connection.getConnection());
-
+    panelController.setRegisterController(this);
     registerUser();
   }
 
-  private void registerUser() {
+  public void registerUser() {
     this.panel = panelController.createRegisterPanel();
     this.loginPanel.getRegisterButton().addActionListener(e -> panelController.showRegisterPanel());
     this.panel.getSubmit().addActionListener(e -> handleRegistration());
@@ -30,18 +30,52 @@ public class RegisterController {
     String username = panel.getUserName();
     String password = panel.getPassword();
     String gender = panel.getGender();
-    int weight = panel.getWeight();
-    int height = panel.getHeight();
+    int weight = (panel.getWeight() != -1) ? panel.getWeight() : -1;
+    int height = (panel.getUserHeight() != -1) ? panel.getUserHeight() : -1;
     String activity = panel.getActivity();
-    int age = panel.getAge();
+    int age = (panel.getAge() != -1) ? panel.getAge() : -1;
 
-    if (model.registerUser(username, password, gender, weight, height, activity, age) == -1) {
-      JOptionPane.showMessageDialog(null, "Failed to register.");
-      ((CardLayout) cards.getLayout()).show(null, "REGISTERPANEL");
+    boolean validate = validateInput(username, password, gender, weight, height, activity, age);
+
+    if (!validate) {
+      JOptionPane.showMessageDialog(null, "Invalid Inputs.");
+      panelController.showRegisterPanel();
     } else {
-      JOptionPane.showMessageDialog(null, "Success!");
-      ((CardLayout) cards.getLayout()).previous(cards);
+      if (model.registerUser(username, password, gender, weight, height, activity, age) == 1) {
+        JOptionPane.showMessageDialog(null, "Success!");
+        ((CardLayout) cards.getLayout()).previous(cards);
+      }
     }
+  }
+
+  private boolean validateInput(String username, String password, String gender, int weight,
+      int height, String activity, int age) {
+    boolean result = true;
+    if (username.isEmpty() || username.length() < 8) {
+      System.out.println("username");
+      result = false;
+    }
+    if (password.length() < 18) {
+      result = false;
+      System.out.println("pass");
+    }
+    if (gender.isEmpty() || gender.isBlank()) {
+      System.out.println("gender");
+      result = false;
+    }
+    if (weight <= 0 || height <= 0) {
+      System.out.println("height or weight");
+      result = false;
+    }
+    if (activity.isEmpty() || activity.isBlank()) {
+      System.out.println("activity");
+      result = false;
+    }
+    if (age <= 0 || age > 120) {
+      result = false;
+      System.out.println("age");
+    }
+    return result;
   }
 
   private RegisterDAO model;

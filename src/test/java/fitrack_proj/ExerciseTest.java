@@ -1,23 +1,13 @@
 package fitrack_proj;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.sql.Date;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
-import fitrack_proj.model.FitrackDatabase;
+import fitrack_proj.model.dao.ExerciseDAO;
 
-class ExerciseTest {
-  private FitrackDatabase connection = new FitrackDatabase();
-
-  private void setUp() {
-    String username = "test_name";
-    String password = "test_password";
-    String gender = "male";
-    int height = 190;
-    int weight = 250;
-    String activity = "none";
-    int age = 25;
-    connection.registerUser(username, password, gender, height, weight, activity, age);
-  }
+class ExerciseTest extends BaseTest {
+  private ExerciseDAO model = new ExerciseDAO(connection.getConnection());
 
   @Test
   void testInsertExercise() {
@@ -25,7 +15,7 @@ class ExerciseTest {
     int user_id = 1;
     String exercise = "cardio";
     int time = 25;
-    assertEquals(1, connection.insertExercise(exercise, time, user_id));
+    assertEquals(1, model.insertExercise(exercise, time, user_id));
   }
 
   @Test
@@ -36,13 +26,13 @@ class ExerciseTest {
   @Test
   void testRetrieveExercise() {
     int user_id = 1;
-    assertNotNull(connection.retrieveHistory(user_id));
+    assertNotNull(model.retrieveHistory(user_id));
   }
 
   @Test
   void testFailureRetrieveExercise() {
     int user_id = -25;
-    assertNull(connection.retrieveHistory(user_id));
+    assertNull(model.retrieveHistory(user_id));
   }
 
 }

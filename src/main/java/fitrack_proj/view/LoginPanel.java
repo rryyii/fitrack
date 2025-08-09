@@ -8,9 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
 import com.formdev.flatlaf.FlatClientProperties;
-
 import net.miginfocom.swing.MigLayout;
 
 public class LoginPanel extends JPanel {
@@ -55,7 +53,7 @@ public class LoginPanel extends JPanel {
 
     userLabel = new JLabel("Username: ");
     passLabel = new JLabel("Password: ");
-
+    
     panel.add(welcomeLabel, "gapbottom 30");
     panel.add(userLabel);
     panel.add(loginField);

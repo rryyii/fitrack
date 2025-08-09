@@ -136,15 +136,27 @@ public class RegisterPanel extends JPanel {
   }
 
   public int getWeight() {
-    return Integer.parseInt(this.weightField.getText());
+    try {
+      return Integer.parseInt(this.weightField.getText());
+    } catch (NumberFormatException nfe) {
+      return -1;
+    }
   }
 
   public int getUserHeight() {
-    return Integer.parseInt(this.heightField.getText());
+    try {
+      return Integer.parseInt(this.heightField.getText());
+    } catch (NumberFormatException nfe) {
+      return -1;
+    }
   }
 
   public int getAge() {
-    return Integer.parseInt(this.ageField.getText());
+    try {
+      return Integer.parseInt(this.ageField.getText());
+    } catch (NumberFormatException nfe) {
+      return -1;
+    }
   }
 
   public String getActivity() {
